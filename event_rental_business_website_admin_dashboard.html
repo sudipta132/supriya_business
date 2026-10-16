@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[Business Name Placeholder] — Event & Occasion Rentals</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS Client CDN for Live Cloud Mode -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Google Fonts: Inter & Noto Sans Bengali -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: {
+              50: '#fdf2f5',
+              100: '#fbe6eb',
+              200: '#f6ced9',
+              500: '#a9264e',
+              600: '#8B1E3F',
+              700: '#731733',
+              800: '#5e132a',
+              900: '#4d1123',
+            },
+            marigold: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              500: '#f59e0b',
+              600: '#D97706',
+              700: '#b45309',
+            },
+            whatsapp: {
+              500: '#22c55e',
+              600: '#16A34A',
+              700: '#15803d',
+            },
+            cream: '#FAF9F6',
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans Bengali', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF9F6;
+      color: #1E293B;
+      font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+    }
+    /* Custom Scrollbar for horizontal category pills */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Subtle festive pattern overlay */
+    .hero-pattern {
+      background-color: #8B1E3F;
+      background-image: radial-gradient(rgba(217, 119, 6, 0.16) 1.5px, transparent 1.5px), radial-gradient(rgba(255, 255, 255, 0.06) 1.5px, #8B1E3F 1.5px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-maroon-600 selection:text-white">
+
+  <!-- TOP SYSTEM BAR (Mode Switcher + Cloud Status + Language Toggle) -->
+  <div class="bg-slate-900 text-slate-200 text-xs py-2 px-3 sm:px-6 border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span id="storageModeBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="storageModeText">Local Persistence Mode (Ready)</span>
+        </span>
+        <span class="hidden md:inline text-slate-400">|</span>
+        <span class="hidden md:inline text-slate-400" data-i18n="topBarNotice">Zero-Cost Architecture • Placeholder Mode Active</span>
+      </div>
+
+      <div class="flex items-center gap-2 ml-auto">
+        <!-- Language Toggle -->
+        <button onclick="toggleLanguage()" id="langToggleBtn" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white font-medium border border-slate-700 transition flex items-center gap-1.5" title="Switch Language">
+          <span>🌐</span>
+          <span id="langToggleLabel">বাংলা / EN</span>
+        </button>
+
+        <!-- Main View Switcher Tabs -->
+        <div class="inline-flex rounded-lg bg-slate-800 p-0.5 border border-slate-700">
+          <button onclick="switchAppView('public')" id="navBtnPublic" class="px-2.5 py-1 rounded-md text-xs font-semibold transition bg-maroon-600 text-white">
+            <span data-i18n="navPublicSite">Customer Site</span>
+          </button>
+          <button onclick="switchAppView('admin')" id="navBtnAdmin" class="px-2.5 py-1 rounded-md text-xs font-semibold transition text-slate-300 hover:text-white flex items-center gap-1">
+            <span>🔒</span> <span data-i18n="navAdminPanel">Admin Dashboard</span>
+          </button>
+          <button onclick="switchAppView('setup')" id="navBtnSetup" class="px-2.5 py-1 rounded-md text-xs font-semibold transition text-slate-300 hover:text-white flex items-center gap-1">
+            <span>🛠️</span> <span class="hidden sm:inline">SQL & Deploy Guide</span><span class="sm:hidden">Setup</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 1: PUBLIC CUSTOMER WEBSITE                                       -->
+  <!-- ===================================================================== -->
+  <div id="viewPublic" class="flex-1 flex flex-col">
+    
+    <!-- PUBLIC HEADER -->
+    <header class="bg-white border-b border-slate-200 sticky top-[37px] z-40 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
+        <!-- Brand Identity -->
+        <a href="#catalogueSection" class="flex items-center gap-3 group focus:outline-none">
+          <div id="publicLogoBox" class="w-11 h-11 rounded-xl bg-maroon-600 text-white flex items-center justify-center font-bold text-lg shadow-sm group-hover:bg-maroon-700 transition shrink-0">
+            ER
+          </div>
+          <div>
+            <h1 id="publicBusinessName" class="font-bold text-base sm:text-xl text-slate-900 leading-tight">
+              [Business Name Placeholder]
+            </h1>
+            <p id="publicTagline" class="text-xs text-slate-500 line-clamp-1">
+              [Tagline Placeholder — Weddings, Parties & Community Event Rentals]
+            </p>
+          </div>
+        </a>
+
+        <!-- Quick Actions -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <a id="headerCallBtn" href="tel:" onclick="return handleDirectCall(event)" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold transition shadow-sm">
+            <svg class="w-4 h-4 text-maroon-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            <span class="hidden sm:inline" data-i18n="callNow">Call Us</span>
+          </a>
+
+          <button onclick="openEnquiryDrawer()" class="relative inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white text-xs sm:text-sm font-semibold transition shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <span data-i18n="enquiryListBtn">Enquiry List</span>
+            <span id="headerCartBadge" class="px-1.5 py-0.5 text-[11px] rounded-full bg-marigold-500 text-slate-950 font-extrabold">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-pattern text-white py-10 sm:py-16 px-4 sm:px-6 border-b border-maroon-800">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7 space-y-5">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-marigold-100 text-xs font-medium">
+            <span>✨</span>
+            <span id="publicServiceAreaBadge">[Service Area Placeholder — Update in Admin Settings]</span>
+          </div>
+          <h2 id="publicHeroTitle" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+            [Hero Heading Placeholder: Quality Rental Equipment for Every Celebration]
+          </h2>
+          <p id="publicHeroSubtext" class="text-maroon-100 text-sm sm:text-base max-w-2xl leading-relaxed">
+            [Business Description Placeholder: Rent chairs, tables, bridal sofas, catering utensils, umbrellas, and weather-protection sheets for weddings, birthdays, religious ceremonies, and family gatherings. Edit this text anytime in the Admin Dashboard.]
+          </p>
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a href="#catalogueSection" class="px-5 py-3 rounded-xl bg-marigold-500 hover:bg-marigold-600 text-slate-950 font-bold text-sm sm:text-base shadow-lg transition inline-flex items-center gap-2">
+              <span data-i18n="browseCatalogue">Browse Rental Catalogue</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </a>
+            <button onclick="openDirectWhatsApp()" class="px-5 py-3 rounded-xl bg-whatsapp-600 hover:bg-whatsapp-700 text-white font-bold text-sm sm:text-base shadow-lg transition inline-flex items-center gap-2">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
+              <span data-i18n="whatsappEnquiry">WhatsApp Us</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- How Renting Works Card -->
+        <div class="lg:col-span-5 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 sm:p-6 text-white">
+          <h3 class="font-bold text-base sm:text-lg mb-4 flex items-center gap-2 text-marigold-100">
+            <span>📋</span>
+            <span data-i18n="howItWorksTitle">How Renting Works (Simple 3-Step Process)</span>
+          </h3>
+          <ol class="space-y-3.5 text-xs sm:text-sm">
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-marigold-500 text-slate-950 font-extrabold flex items-center justify-center shrink-0 mt-0.5">1</span>
+              <div>
+                <p class="font-semibold text-white" data-i18n="step1Title">Select Items & Quantities</p>
+                <p class="text-maroon-100" data-i18n="step1Desc">Browse our catalogue and add chairs, tables, utensils, or bridal sofas to your enquiry list.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-marigold-500 text-slate-950 font-extrabold flex items-center justify-center shrink-0 mt-0.5">2</span>
+              <div>
+                <p class="font-semibold text-white" data-i18n="step2Title">Send Enquiry on WhatsApp or Call</p>
+                <p class="text-maroon-100" data-i18n="step2Desc">Pick your event dates and send a pre-filled WhatsApp message—no typing or online payment needed.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-marigold-500 text-slate-950 font-extrabold flex items-center justify-center shrink-0 mt-0.5">3</span>
+              <div>
+                <p class="font-semibold text-white" data-i18n="step3Title">Confirm Availability & Self-Collection</p>
+                <p id="publicCollectionSummary" class="text-maroon-100">[Collection Instructions Placeholder: We confirm availability directly. Customers generally collect and return rented items from our pickup point.]</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- OCCASIONS BANNER -->
+    <section class="bg-white border-b border-slate-200 py-3.5 px-4">
+      <div class="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto no-scrollbar text-xs sm:text-sm text-slate-700 font-medium whitespace-nowrap">
+        <span class="text-maroon-700 font-bold shrink-0" data-i18n="occasionsLabel">Occasions We Serve:</span>
+        <span class="px-3 py-1 rounded-full bg-maroon-50 text-maroon-800 border border-maroon-200">💍 Weddings & Receptions</span>
+        <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-200">🎂 Birthdays & Anniversaries</span>
+        <span class="px-3 py-1 rounded-full bg-maroon-50 text-maroon-800 border border-maroon-200">🪔 Religious Ceremonies & Puja</span>
+        <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-200">👨‍👩‍👧‍👦 Family Gatherings</span>
+        <span class="px-3 py-1 rounded-full bg-maroon-50 text-maroon-800 border border-maroon-200">⛺ Picnics & Outdoor Functions</span>
+        <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-200">🤝 Community Events</span>
+      </div>
+    </section>
+
+    <!-- CATALOGUE SECTION -->
+    <main id="catalogueSection" class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-10 flex-1">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900" data-i18n="catalogueHeading">Rental Product Catalogue</h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1" data-i18n="catalogueSubheading">
+            All prices are fixed per stated unit. Select items to build your WhatsApp quote request.
+          </p>
+        </div>
+
+        <!-- Search & Availability Filter -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
+          <div class="relative flex-1 sm:w-72">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input
+              type="text"
+              id="publicSearchInput"
+              oninput="renderPublicCatalogue()"
+              placeholder="Search chairs, utensils, sofa..."
+              class="w-full pl-9 pr-8 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-maroon-600"
+            />
+          </div>
+          <label class="inline-flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm font-medium text-slate-700 cursor-pointer select-none">
+            <input type="checkbox" id="onlyAvailableCheckbox" onchange="renderPublicCatalogue()" class="rounded text-maroon-600 focus:ring-maroon-600 w-4 h-4" />
+            <span data-i18n="availableOnly">Available Only</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Category Pills -->
+      <div id="publicCategoryPills" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 mb-6 border-b border-slate-200">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Product Grid -->
+      <div id="publicProductGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="publicEmptyState" class="hidden bg-white rounded-2xl border border-slate-200 p-10 text-center max-w-md mx-auto my-8">
+        <div class="w-12 h-12 rounded-full bg-maroon-50 text-maroon-600 flex items-center justify-center mx-auto mb-3 text-xl">🔍</div>
+        <h3 class="font-bold text-slate-900 text-base mb-1" data-i18n="noProductsFound">No matching rental items found</h3>
+        <p class="text-xs text-slate-500 mb-4" data-i18n="noProductsDesc">Try clearing your search filter or ask us directly on WhatsApp for custom requirements.</p>
+        <button onclick="resetPublicFilters()" class="px-4 py-2 rounded-xl bg-maroon-600 text-white text-xs font-semibold hover:bg-maroon-700 transition">
+          Reset Filters
+        </button>
+      </div>
+    </main>
+
+    <!-- COLLECTION & CONTACT SECTION -->
+    <section class="bg-white border-t border-slate-200 py-10 px-4 sm:px-6">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-5 rounded-2xl bg-cream border border-slate-200">
+          <div class="w-9 h-9 rounded-xl bg-maroon-100 text-maroon-700 flex items-center justify-center font-bold mb-3">📍</div>
+          <h3 class="font-bold text-slate-900 text-base mb-1.5" data-i18n="collectionTitle">Collection & Return Arrangements</h3>
+          <p id="footerCollectionText" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            [Collection Instructions Placeholder]
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-cream border border-slate-200">
+          <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold mb-3">🕒</div>
+          <h3 class="font-bold text-slate-900 text-base mb-1.5" data-i18n="serviceAreaTitle">Service Area & Timings</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-2">
+            <strong class="text-slate-800">Area:</strong> <span id="footerServiceArea">[Service Area Placeholder]</span>
+          </p>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <strong class="text-slate-800">Hours:</strong> <span id="footerOpeningHours">[Opening Hours Placeholder]</span>
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-cream border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold mb-3">📞</div>
+            <h3 class="font-bold text-slate-900 text-base mb-1.5" data-i18n="directContactTitle">Direct Contact & Support</h3>
+            <p class="text-xs sm:text-sm text-slate-600 mb-3">
+              Phone: <span id="footerPhoneDisplay" class="font-semibold text-slate-900">[Phone Number Placeholder]</span><br/>
+              WhatsApp: <span id="footerWhatsappDisplay" class="font-semibold text-slate-900">[WhatsApp Number Placeholder]</span>
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2">
+            <button onclick="openDirectWhatsApp()" class="flex-1 py-2.5 px-3 rounded-xl bg-whatsapp-600 hover:bg-whatsapp-700 text-white font-semibold text-xs text-center transition">
+              WhatsApp Chat
+            </button>
+            <a href="tel:" onclick="return handleDirectCall(event)" class="flex-1 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs text-center transition">
+              Call Owner
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 px-4 sm:px-6 border-t border-slate-800 mb-14 sm:mb-0">
+      <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>© <span id="footerYear">2026</span> <span id="footerBizName">[Business Name Placeholder]</span>. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <button onclick="switchAppView('admin')" class="text-slate-300 hover:text-white underline">Admin Dashboard Login</button>
+          <span>•</span>
+          <button onclick="switchAppView('setup')" class="text-slate-300 hover:text-white underline">Cloudflare & Supabase Guide</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- STICKY MOBILE BOTTOM ENQUIRY BAR -->
+    <div id="mobileStickyCartBar" class="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-slate-200 p-3 shadow-2xl sm:hidden flex items-center justify-between gap-3">
+      <div>
+        <p class="text-xs font-bold text-slate-900"><span id="mobileBarCount">0</span> items in Enquiry List</p>
+        <p id="mobileBarEstimate" class="text-[11px] text-slate-500">Tap to review & send via WhatsApp</p>
+      </div>
+      <button onclick="openEnquiryDrawer()" class="px-4 py-2.5 rounded-xl bg-maroon-600 text-white font-bold text-xs shadow-md flex items-center gap-1.5">
+        <span data-i18n="reviewEnquiry">Review Enquiry</span>
+        <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 2: PRIVATE ADMIN DASHBOARD                                       -->
+  <!-- ===================================================================== -->
+  <div id="viewAdmin" class="hidden flex-1 flex flex-col bg-slate-100">
+    
+    <!-- ADMIN LOGIN GATE -->
+    <div id="adminLoginScreen" class="flex-1 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6 sm:p-8">
+        <div class="w-12 h-12 rounded-2xl bg-maroon-600 text-white flex items-center justify-center font-bold text-xl mb-4">
+          🔒
+        </div>
+        <h2 class="text-xl font-extrabold text-slate-900 mb-1">Admin Dashboard Sign In</h2>
+        <p class="text-xs text-slate-500 mb-5">
+          Manage rental products, prices, photos, categories, and business contact details without touching code.
+        </p>
+
+        <!-- Demo / Local Mode Notice -->
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3.5 mb-5 text-xs text-amber-900">
+          <p class="font-bold mb-1">✨ Interactive Preview Passcode:</p>
+          <p>Email: <code class="bg-white px-1.5 py-0.5 rounded border border-amber-300 font-mono">admin@rental.local</code></p>
+          <p class="mt-0.5">Password: <code class="bg-white px-1.5 py-0.5 rounded border border-amber-300 font-mono">admin123</code></p>
+          <p class="text-[11px] text-amber-700 mt-1.5">When connected to Supabase Auth in Tab 4, this uses real Supabase JWT authentication & Row Level Security.</p>
+        </div>
+
+        <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Administrator Email</label>
+            <input type="email" id="adminEmailInput" value="admin@rental.local" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon-600" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+            <div class="relative">
+              <input type="password" id="adminPasswordInput" value="admin123" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon-600" />
+              <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500 hover:text-slate-800 font-medium">
+                Show
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="w-full py-3 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white font-bold text-sm shadow-md transition">
+            Unlock Admin Dashboard
+          </button>
+          <button type="button" onclick="switchAppView('public')" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition">
+            ← Return to Public Customer Website
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- AUTHENTICATED ADMIN WORKSPACE -->
+    <div id="adminWorkspace" class="hidden flex-1 flex flex-col">
+      <!-- Admin Header -->
+      <div class="bg-white border-b border-slate-200 px-4 sm:px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-maroon-100 text-maroon-800 font-bold text-[11px]">ADMIN PANEL</span>
+              <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Website & Catalogue Manager</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">All changes made here immediately update the customer website.</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="switchAppView('public')" class="px-3.5 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+              👁️ Preview Public Website
+            </button>
+            <button onclick="handleAdminLogout()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
+              Sign Out
+            </button>
+          </div>
+        </div>
+
+        <!-- Admin Navigation Tabs -->
+        <div class="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto no-scrollbar pt-4 mt-3 border-t border-slate-100">
+          <button onclick="switchAdminTab('products')" id="adminTabBtn_products" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-maroon-600 text-white shrink-0">
+            📦 Products (<span id="adminTotalProductsCount">0</span>)
+          </button>
+          <button onclick="switchAdminTab('categories')" id="adminTabBtn_categories" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 shrink-0">
+            🗂️ Categories (<span id="adminTotalCategoriesCount">0</span>)
+          </button>
+          <button onclick="switchAdminTab('settings')" id="adminTabBtn_settings" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 shrink-0">
+            ⚙️ Business Info & WhatsApp
+          </button>
+          <button onclick="switchAdminTab('backup')" id="adminTabBtn_backup" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 shrink-0">
+            💾 Backup, CSV Export & Cloud Sync
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Content Area -->
+      <div class="max-w-7xl mx-auto w-full p-4 sm:p-6 flex-1">
+        
+        <!-- TAB 1: PRODUCTS MANAGEMENT -->
+        <div id="adminTab_products" class="space-y-5">
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
+              <input
+                type="text"
+                id="adminProductSearch"
+                oninput="renderAdminProducts()"
+                placeholder="Search by product name or SKU..."
+                class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon-600 sm:w-72"
+              />
+              <select id="adminCategoryFilter" onchange="renderAdminProducts()" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-maroon-600">
+                <option value="all">All Categories</option>
+              </select>
+            </div>
+            <button onclick="openProductModal()" class="px-5 py-3 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2 shrink-0">
+              <span>➕</span> Add New Rental Product
+            </button>
+          </div>
+
+          <div id="adminProductsList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- TAB 2: CATEGORIES MANAGEMENT -->
+        <div id="adminTab_categories" class="hidden space-y-5">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm max-w-3xl">
+            <h3 class="font-bold text-slate-900 text-base mb-1">Manage Product Categories</h3>
+            <p class="text-xs text-slate-500 mb-4">Create, rename, reorder, or hide categories. Categories containing products are protected from accidental deletion.</p>
+
+            <form onsubmit="handleAddCategory(event)" class="flex flex-col sm:flex-row gap-2.5 mb-6 pb-5 border-b border-slate-200">
+              <input type="text" id="newCatNameEn" required placeholder="Category Name (English) e.g. Lighting & Sound" class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+              <input type="text" id="newCatNameBn" placeholder="বাংলা নাম (Optional)" class="sm:w-52 px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white font-bold text-sm shrink-0">
+                + Add Category
+              </button>
+            </form>
+
+            <div id="adminCategoriesList" class="space-y-2.5">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: BUSINESS SETTINGS -->
+        <div id="adminTab_settings" class="hidden">
+          <form onsubmit="handleSaveBusinessSettings(event)" class="bg-white p-5 sm:p-7 rounded-2xl border border-slate-200 shadow-sm max-w-3xl space-y-5">
+            <div class="border-b border-slate-200 pb-4">
+              <h3 class="font-bold text-slate-900 text-lg">Business Identity & Contact Settings</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Replace the placeholders below with your mother's real business details when ready. No code edits required.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Business Name *</label>
+                <input type="text" id="setBizName" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Logo Initials / Short Monogram (2-3 chars)</label>
+                <input type="text" id="setLogoText" maxlength="3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Short Header Tagline</label>
+              <input type="text" id="setTagline" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-emerald-50/70 p-4 rounded-xl border border-emerald-200">
+              <div>
+                <label class="block text-xs font-bold text-emerald-950 mb-1">WhatsApp Number (with country code, e.g. 919876543210)</label>
+                <input type="text" id="setWhatsapp" placeholder="e.g. 919876543210 or placeholder" class="w-full px-3.5 py-2.5 rounded-xl border border-emerald-300 text-sm bg-white" />
+                <p class="text-[11px] text-emerald-800 mt-1">Used for pre-filled customer WhatsApp orders. Digits only when live.</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-emerald-950 mb-1">Direct Phone Call Number</label>
+                <input type="text" id="setPhone" placeholder="e.g. +91 98765 43210" class="w-full px-3.5 py-2.5 rounded-xl border border-emerald-300 text-sm bg-white" />
+                <p class="text-[11px] text-emerald-800 mt-1">Displayed on website & linked to the Call button.</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Homepage Hero Heading</label>
+              <input type="text" id="setHeroTitle" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Homepage Introduction / Description</label>
+              <textarea id="setHeroSubtext" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Service Area</label>
+                <input type="text" id="setServiceArea" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Opening / Contact Hours</label>
+                <input type="text" id="setOpeningHours" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Customer Pickup / Collection Instructions</label>
+              <textarea id="setCollectionInstructions" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm"></textarea>
+            </div>
+
+            <div class="pt-3 flex items-center justify-end gap-3 border-t border-slate-200">
+              <button type="submit" class="px-6 py-3 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white font-bold text-sm shadow-md transition">
+                💾 Save & Publish Business Settings
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- TAB 4: BACKUPS, DATA PORTABILITY & SUPABASE CLOUD CONNECTION -->
+        <div id="adminTab_backup" class="hidden space-y-6 max-w-4xl">
+          <!-- Data Export & Import Card -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <h3 class="font-bold text-slate-900 text-base">1. Catalogue Backup & Portability (Zero Lock-In)</h3>
+            <p class="text-xs text-slate-600">
+              Download your entire product inventory, categories, and business settings as a spreadsheet (CSV) or complete backup file (JSON) anytime.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="exportDataJSON()" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+                ⬇️ Export Full Backup (.JSON)
+              </button>
+              <button onclick="exportProductsCSV()" class="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition">
+                📊 Export Products Spreadsheet (.CSV)
+              </button>
+              <label class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold cursor-pointer transition">
+                ⬆️ Restore from Backup (.JSON)
+                <input type="file" accept=".json" onchange="importDataJSON(event)" class="hidden" />
+              </label>
+              <button onclick="resetToDefaultPlaceholders()" class="px-4 py-2.5 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition ml-auto">
+                🔄 Reset to Default Placeholders
+              </button>
+            </div>
+          </div>
+
+          <!-- Supabase Live Cloud Connection -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="font-bold text-slate-900 text-base">2. Optional Live Supabase Cloud Connection (₹0 Free Tier)</h3>
+                <p class="text-xs text-slate-600 mt-1">
+                  By default, this app works immediately using local persistence. Once you create your free Supabase project (see the <strong>SQL & Deploy Guide</strong> tab), paste your Public Project URL and Anon Key below to sync with cloud PostgreSQL & Supabase Storage.
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Supabase Project URL (Safe Public Variable)</label>
+                <input type="url" id="sbUrlInput" placeholder="https://your-project.supabase.co" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Supabase Public `anon` Key (Safe with RLS)</label>
+                <input type="text" id="sbAnonKeyInput" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono" />
+              </div>
+            </div>
+            <p class="text-[11px] text-red-700 bg-red-50 border border-red-200 rounded-lg p-2.5">
+              ⚠️ <strong>Security Rule:</strong> Only use your public <code>anon</code> key here. <strong>NEVER</strong> paste your <code>service_role</code> secret key into any browser form or frontend code.
+            </p>
+            <div class="flex items-center gap-3">
+              <button onclick="saveSupabaseConfig()" class="px-4 py-2.5 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white text-xs font-bold transition">
+                Save & Test Supabase Connection
+              </button>
+              <button onclick="disconnectSupabaseConfig()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                Use Local Browser Storage Only
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 3: SETUP, SQL SCHEMA & DEPLOYMENT HANDOVER GUIDE (STAGES 3, 7, 8) -->
+  <!-- ===================================================================== -->
+  <div id="viewSetup" class="hidden flex-1 bg-slate-50 py-8 px-4 sm:px-6">
+    <div class="max-w-5xl mx-auto space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
+        <span class="px-2.5 py-1 rounded-full bg-maroon-100 text-maroon-800 text-xs font-bold">STAGE 3, 7 & 8 HANDOVER</span>
+        <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Zero-Cost Production Setup, SQL Security & Maintenance Guide</h2>
+        <p class="text-sm text-slate-600 mt-1">
+          Follow these exact steps on your Windows PC to deploy this application for ₹0 using GitHub, Cloudflare Pages, and Supabase Free Tier.
+        </p>
+      </div>
+
+      <!-- Free Tier Limits Transparency -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <h3 class="font-bold text-slate-900 text-base">📊 Transparent Free-Tier Limits & Safeguards Built Into This App</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="font-bold text-slate-900 mb-1">1. Supabase Database (500 MB Free)</p>
+            <p class="text-slate-600">500MB stores tens of thousands of text product records. <strong>Inactivity Rule:</strong> Free projects pause after 7 days of 0 traffic. If paused, click "Restore" in the Supabase dashboard or keep regular visitor traffic.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="font-bold text-slate-900 mb-1">2. Supabase Storage (1 GB Free)</p>
+            <p class="text-slate-600">Phone photos are 4–8MB each. Our Admin uploader automatically compresses photos in the browser to <strong>~80–160KB JPEG</strong> before saving, allowing 5,000+ photos inside 1GB.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="font-bold text-slate-900 mb-1">3. Cloudflare Pages (₹0 Forever Plan)</p>
+            <p class="text-slate-600">Provides a free <code>*.pages.dev</code> subdomain, free SSL certificate, and unlimited static bandwidth. If Supabase is ever offline, your exported JSON backup keeps the site running.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complete SQL Migration & RLS Script -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-bold text-slate-900 text-base">🔐 Complete Supabase SQL Schema & Row Level Security (RLS)</h3>
+            <p class="text-xs text-slate-500">Copy and run this inside your Supabase SQL Editor. It enforces strict public read-only access and admin-only writes.</p>
+          </div>
+          <button onclick="copySqlSchema()" class="px-3.5 py-2 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white text-xs font-bold transition">
+            📋 Copy SQL Script
+          </button>
+        </div>
+        <pre id="sqlSchemaBlock" class="bg-slate-900 text-emerald-300 p-4 rounded-xl text-xs font-mono overflow-x-auto leading-relaxed max-h-96">-- ============================================================================
+-- EVENT RENTAL BUSINESS SCHEMA + ROW LEVEL SECURITY (SUPABASE POSTGRESQL)
+-- ============================================================================
+
+-- 1. Categories Table
+CREATE TABLE IF NOT EXISTS public.categories (
+  id TEXT PRIMARY KEY,
+  name_en TEXT NOT NULL,
+  name_bn TEXT DEFAULT '',
+  display_order INTEGER NOT NULL DEFAULT 1,
+  is_hidden BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 2. Products Table
+CREATE TABLE IF NOT EXISTS public.products (
+  id TEXT PRIMARY KEY,
+  sku TEXT DEFAULT '',
+  name_en TEXT NOT NULL,
+  name_bn TEXT DEFAULT '',
+  category_id TEXT REFERENCES public.categories(id) ON DELETE RESTRICT,
+  description TEXT DEFAULT '',
+  price NUMERIC(10, 2) DEFAULT NULL,
+  pricing_unit TEXT NOT NULL DEFAULT 'per day',
+  pricing_notes TEXT DEFAULT '',
+  stock_quantity INTEGER DEFAULT NULL,
+  images JSONB DEFAULT '[]'::jsonb,
+  is_published BOOLEAN NOT NULL DEFAULT TRUE,
+  is_available BOOLEAN NOT NULL DEFAULT TRUE,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 3. Business Settings Table (Single-row configuration)
+CREATE TABLE IF NOT EXISTS public.business_settings (
+  id INTEGER PRIMARY KEY CHECK (id = 1),
+  business_name TEXT NOT NULL,
+  logo_text TEXT DEFAULT 'ER',
+  tagline TEXT DEFAULT '',
+  phone_number TEXT DEFAULT '',
+  whatsapp_number TEXT DEFAULT '',
+  hero_title TEXT DEFAULT '',
+  hero_subtext TEXT DEFAULT '',
+  service_area TEXT DEFAULT '',
+  opening_hours TEXT DEFAULT '',
+  collection_instructions TEXT DEFAULT '',
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. Enable Row Level Security (RLS) on all tables
+ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.business_settings ENABLE ROW LEVEL SECURITY;
+
+-- 5. RLS Policies: Public can ONLY read published/visible records
+CREATE POLICY "Public can read visible categories"
+  ON public.categories FOR SELECT
+  USING (is_hidden = FALSE OR auth.role() = 'authenticated');
+
+CREATE POLICY "Public can read published products"
+  ON public.products FOR SELECT
+  USING (is_published = TRUE OR auth.role() = 'authenticated');
+
+CREATE POLICY "Public can read business settings"
+  ON public.business_settings FOR SELECT
+  USING (TRUE);
+
+-- 6. RLS Policies: ONLY Authenticated Admin can Insert/Update/Delete
+CREATE POLICY "Authenticated admin full access categories"
+  ON public.categories FOR ALL
+  TO authenticated
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated admin full access products"
+  ON public.products FOR ALL
+  TO authenticated
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
+
+CREATE POLICY "Authenticated admin full access settings"
+  ON public.business_settings FOR ALL
+  TO authenticated
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
+
+-- 7. Storage Bucket for Product Photos (Run in SQL Editor)
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('product-images', 'product-images', true)
+ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "Public read access for product images"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'product-images');
+
+CREATE POLICY "Admin upload/delete product images"
+  ON storage.objects FOR ALL
+  TO authenticated
+  USING (bucket_id = 'product-images' AND auth.role() = 'authenticated')
+  WITH CHECK (bucket_id = 'product-images' AND auth.role() = 'authenticated');</pre>
+      </div>
+
+      <!-- Step-by-Step Windows & Cloudflare Pages Deployment -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <h3 class="font-bold text-slate-900 text-base">🚀 Step-by-Step Deployment Instructions (Windows + GitHub + Cloudflare Pages)</h3>
+        <ol class="space-y-3 text-xs sm:text-sm text-slate-700 list-decimal list-inside">
+          <li><strong>Create Free Supabase Account:</strong> Go to <code>supabase.com</code>, create a new project, open the <strong>SQL Editor</strong>, paste the script above, and click <strong>Run</strong>.</li>
+          <li><strong>Create Your Admin User & Disable Public Signups:</strong> In Supabase → <em>Authentication → Users</em>, click <strong>Add User → Create New User</strong> with your admin email & strong password. Then go to <em>Authentication → Providers → Email</em> and toggle <strong>OFF "Allow new users to sign up"</strong> so nobody else can register.</li>
+          <li><strong>Save Code on Windows:</strong> Save this file as <code>index.html</code> in a folder on your computer (e.g., <code>C:\rental-website\index.html</code>).</li>
+          <li><strong>Push to GitHub:</strong> Create a free repository on <code>github.com</code>, upload <code>index.html</code>, and commit.</li>
+          <li><strong>Deploy Free on Cloudflare Pages:</strong> Log in to <code>dash.cloudflare.com</code> → <em>Workers & Pages → Create → Pages → Connect to Git</em>. Select your repository and click <strong>Save and Deploy</strong>. No build command is needed. Your site will be live globally on <code>https://your-project.pages.dev</code> in 60 seconds!</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: PRODUCT DETAIL MODAL (PUBLIC)                                -->
+  <!-- ===================================================================== -->
+  <div id="productDetailModal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200 sticky top-0 bg-white z-10">
+        <span id="detailModalCategoryBadge" class="px-2.5 py-1 rounded-full bg-maroon-50 text-maroon-700 text-xs font-bold">Category</span>
+        <button onclick="closeProductDetailModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">✕</button>
+      </div>
+      <div class="p-5 sm:p-6 space-y-5">
+        <div id="detailModalImageContainer" class="w-full h-64 sm:h-72 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden">
+          <!-- Image or SVG -->
+        </div>
+        <!-- Thumbnails if multiple photos exist -->
+        <div id="detailModalThumbs" class="flex items-center gap-2 overflow-x-auto no-scrollbar"></div>
+
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p id="detailModalSku" class="text-xs font-mono text-slate-400">SKU: —</p>
+            <h3 id="detailModalTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900">Product Name</h3>
+          </div>
+          <div class="text-right">
+            <div id="detailModalPrice" class="text-lg sm:text-xl font-extrabold text-maroon-700">Price</div>
+            <div id="detailModalUnit" class="text-xs text-slate-500">per unit</div>
+          </div>
+        </div>
+
+        <div id="detailModalAvailabilityBox" class="text-xs font-semibold"></div>
+
+        <div class="bg-cream p-4 rounded-xl border border-slate-200 space-y-2">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Description & Rental Notes</h4>
+          <p id="detailModalDesc" class="text-sm text-slate-700 leading-relaxed whitespace-pre-line"></p>
+          <p id="detailModalPricingNotes" class="text-xs text-amber-800 font-medium pt-1"></p>
+        </div>
+
+        <div id="detailModalActionArea" class="pt-2">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: ENQUIRY CART DRAWER / MODAL (STAGE 6 WORKFLOW)               -->
+  <!-- ===================================================================== -->
+  <div id="enquiryDrawerModal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex justify-end">
+    <div class="bg-white w-full max-w-lg h-full flex flex-col shadow-2xl">
+      <!-- Drawer Header -->
+      <div class="px-5 py-4 bg-maroon-600 text-white flex items-center justify-between">
+        <div>
+          <h3 class="font-extrabold text-base sm:text-lg" data-i18n="enquiryDrawerTitle">Your Rental Enquiry List</h3>
+          <p class="text-xs text-maroon-100" data-i18n="enquiryDrawerSub">No online payment required • Send directly on WhatsApp</p>
+        </div>
+        <button onclick="closeEnquiryDrawer()" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 text-white font-bold">✕</button>
+      </div>
+
+      <!-- Drawer Body -->
+      <div class="p-5 flex-1 overflow-y-auto space-y-5">
+        <!-- Important Reservation Disclaimer -->
+        <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-950 leading-relaxed">
+          <strong>⚠️ Please Note:</strong> Sending an enquiry does <u>not</u> automatically reserve inventory. Our team will review your list and confirm final availability and pricing via WhatsApp or phone call.
+        </div>
+
+        <!-- Selected Items List -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Selected Rental Items</h4>
+            <button onclick="clearEnquiryCart()" id="clearCartBtn" class="text-xs text-red-600 hover:underline font-medium">Clear All</button>
+          </div>
+          <div id="enquiryCartItemsContainer" class="space-y-2.5">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Estimated Summary -->
+        <div id="enquiryEstimateBox" class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Customer & Event Details Form -->
+        <div class="space-y-3.5 pt-2 border-t border-slate-200">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Event & Contact Details</h4>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Rental Start Date *</label>
+              <input type="date" id="enqStartDate" onchange="updateEnquiryTotals()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Return Date (Optional)</label>
+              <input type="date" id="enqReturnDate" onchange="updateEnquiryTotals()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Your Name *</label>
+              <input type="text" id="enqCustomerName" placeholder="Enter your name" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Your Phone Number *</label>
+              <input type="tel" id="enqCustomerPhone" placeholder="10-digit mobile number" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Occasion Type</label>
+              <select id="enqOccasion" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white">
+                <option value="Wedding / Marriage Ceremony">Wedding / Marriage Ceremony</option>
+                <option value="Birthday / Anniversary">Birthday / Anniversary</option>
+                <option value="Religious Ceremony / Puja">Religious Ceremony / Puja</option>
+                <option value="Family Gathering">Family Gathering</option>
+                <option value="Picnic / Outdoor Function">Picnic / Outdoor Function</option>
+                <option value="Community Event">Community Event</option>
+                <option value="Other Occasion">Other Occasion</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Event Location / Area</label>
+              <input type="text" id="enqLocation" placeholder="Locality / Landmark" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Special Notes (Optional)</label>
+            <textarea id="enqNotes" rows="2" placeholder="Any specific questions or collection timing preferences..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drawer Footer Actions -->
+      <div class="p-4 bg-white border-t border-slate-200 space-y-2">
+        <button onclick="submitEnquiryViaWhatsApp()" class="w-full py-3 px-4 rounded-xl bg-whatsapp-600 hover:bg-whatsapp-700 text-white font-bold text-sm shadow-lg transition flex items-center justify-center gap-2">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
+          <span>Send Enquiry on WhatsApp</span>
+        </button>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="copyEnquirySummaryText()" class="py-2 px-3 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition">
+            📋 Copy Enquiry Text
+          </button>
+          <a href="tel:" onclick="return handleDirectCall(event)" class="py-2 px-3 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs text-center transition">
+            📞 Call Business Directly
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 3: ADMIN PRODUCT ADD / EDIT MODAL (WITH IMAGE COMPRESSION)      -->
+  <!-- ===================================================================== -->
+  <div id="adminProductModal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200">
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
+        <h3 id="adminProductModalTitle" class="font-extrabold text-lg text-slate-900">Add / Edit Product</h3>
+        <button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">✕</button>
+      </div>
+
+      <form onsubmit="handleSaveProduct(event)" class="p-6 space-y-4">
+        <input type="hidden" id="prodEditId" />
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Product Name (English) *</label>
+            <input type="text" id="prodNameEn" required placeholder="e.g. Maharaja Bridal Sofa (2-Seater)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">SKU / Code</label>
+            <input type="text" id="prodSku" placeholder="e.g. CHR-01" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-mono" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Product Name in Bengali (Optional)</label>
+            <input type="text" id="prodNameBn" placeholder="বাংলা নাম (ঐচ্ছিক)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Category *</label>
+            <select id="prodCategory" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white"></select>
+          </div>
+        </div>
+
+        <!-- Pricing & Units -->
+        <div class="p-4 rounded-xl bg-amber-50/60 border border-amber-200 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Rental Price (₹)</label>
+            <input type="number" step="0.01" min="0" id="prodPrice" placeholder="Leave blank if On Request" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white" />
+            <p class="text-[10px] text-slate-500 mt-0.5">Leave blank until real price is decided.</p>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Pricing Unit *</label>
+            <select id="prodPricingUnit" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
+              <option value="per item / per day">per item / per day</option>
+              <option value="per item">per item</option>
+              <option value="per set">per set</option>
+              <option value="per day">per day</option>
+              <option value="per event">per event</option>
+              <option value="price on request">price on request</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Available Qty (Optional)</label>
+            <input type="number" min="0" id="prodStockQty" placeholder="Blank = Not tracked" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Description & Specifications</label>
+          <textarea id="prodDescription" rows="3" placeholder="Material, dimensions, or condition details..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Pricing Duration / Special Rules (Optional)</label>
+          <input type="text" id="prodPricingNotes" placeholder="e.g. Standard 24-hour rental period; cleaning included" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs" />
+        </div>
+
+        <!-- Image Uploader with Automatic Client-Side Compression -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <label class="block text-xs font-bold text-slate-800">Product Photographs (Phone Camera or File Upload)</label>
+              <p class="text-[11px] text-slate-500">Automatically resized & compressed to &lt;150KB to save free-tier storage.</p>
+            </div>
+            <label class="px-3.5 py-2 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white text-xs font-bold cursor-pointer transition shrink-0">
+              📷 + Upload Photo
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="handleProductImageUpload(event)" class="hidden" />
+            </label>
+          </div>
+
+          <div id="imageCompressionStatus" class="hidden text-xs text-emerald-700 font-medium"></div>
+
+          <div id="prodImagesPreviewList" class="grid grid-cols-3 sm:grid-cols-4 gap-3 pt-1">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Status Checkboxes -->
+        <div class="flex flex-wrap items-center gap-6 pt-2">
+          <label class="inline-flex items-center gap-2 text-sm font-semibold text-slate-800 cursor-pointer">
+            <input type="checkbox" id="prodIsPublished" checked class="w-4 h-4 rounded text-maroon-600" />
+            <span>Published on Public Website</span>
+          </label>
+          <label class="inline-flex items-center gap-2 text-sm font-semibold text-slate-800 cursor-pointer">
+            <input type="checkbox" id="prodIsAvailable" checked class="w-4 h-4 rounded text-emerald-600" />
+            <span>Currently Available for Rent</span>
+          </label>
+        </div>
+
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeProductModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">
+            Cancel
+          </button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white text-xs sm:text-sm font-bold shadow-md">
+            💾 Save Product
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 4: CUSTOM CONFIRMATION MODAL (NO NATIVE ALERT/CONFIRM)          -->
+  <!-- ===================================================================== -->
+  <div id="confirmDialogModal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <h3 id="confirmDialogTitle" class="font-extrabold text-base text-slate-900">Confirm Action</h3>
+      <p id="confirmDialogMessage" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
+      <div class="flex items-center justify-end gap-2.5 pt-2">
+        <button onclick="closeConfirmDialog()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">
+          Cancel
+        </button>
+        <button id="confirmDialogActionBtn" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-16 sm:bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION JAVASCRIPT                                                -->
+  <!-- ===================================================================== -->
+  <script>
+    /*************************************************************************
+     * 1. STRICT PLACEHOLDER DEFAULT DATA (NO INVENTED REAL PRICES OR CONTACTS)
+     *************************************************************************/
+    const STORAGE_KEY_STATE = 'event_rental_app_state_v1';
+    const STORAGE_KEY_CART  = 'event_rental_enquiry_cart_v1';
+    const STORAGE_KEY_SB    = 'event_rental_supabase_cfg_v1';
+
+    const DEFAULT_STATE = {
+      settings: {
+        business_name: '[Business Name Placeholder]',
+        logo_text: 'ER',
+        tagline: '[Tagline Placeholder — Event & Function Rentals]',
+        phone_number: '[Phone Number Placeholder]',
+        whatsapp_number: '[WhatsApp Number Placeholder]',
+        hero_title: '[Hero Heading Placeholder: Rental Equipment for Weddings, Ceremonies & Gatherings]',
+        hero_subtext: '[Business Description Placeholder: Replace this text in the Admin Dashboard with your mother’s business introduction. We provide chairs, tables, catering utensils, bridal sofas, umbrellas, and plastic sheets.]',
+        service_area: '[Service Area Placeholder — Update in Admin]',
+        opening_hours: '[Opening Hours Placeholder — Update in Admin]',
+        collection_instructions: '[Collection Instructions Placeholder: Customers generally collect and return rented items themselves. Exact pickup address and timing will be shared upon confirmation.]'
+      },
+      categories: [
+        { id: 'cat-chairs-tables', name_en: 'Chairs & Tables', name_bn: 'চেয়ার ও টেবিল', display_order: 1, is_hidden: false },
+        { id: 'cat-utensils', name_en: 'Utensils & Catering', name_bn: 'বাসনপত্র ও ক্যাটারিং', display_order: 2, is_hidden: false },
+        { id: 'cat-bridal-sofas', name_en: 'Bridal Sofas', name_bn: 'বিয়ের সোফা', display_order: 3, is_hidden: false },
+        { id: 'cat-umbrellas-sheets', name_en: 'Umbrellas & Plastic Sheets', name_bn: 'ছাতা ও ত্রিপল/প্লাস্টিক শিট', display_order: 4, is_hidden: false },
+        { id: 'cat-other', name_en: 'Other Products', name_bn: 'অন্যান্য সামগ্রী', display_order: 5, is_hidden: false }
+      ],
+      products: [
+        {
+          id: 'prod-sample-1',
+          sku: 'SAMPLE-CHR-01',
+          name_en: 'Plastic Armchair [Placeholder Sample - Edit in Admin]',
+          name_bn: 'প্লাস্টিক চেয়ার [নমুনা - অ্যাডমিনে পরিবর্তন করুন]',
+          category_id: 'cat-chairs-tables',
+          description: 'Template item for moulded event chairs. Open Admin Dashboard -> Products to enter your real rental rate, upload actual photos, and set your stock count.',
+          price: null,
+          pricing_unit: 'per item / per day',
+          pricing_notes: '[Pricing Rule Placeholder — Set rate in Admin]',
+          stock_quantity: null,
+          images: [],
+          svg_icon: 'chair',
+          is_published: true,
+          is_available: true
+        },
+        {
+          id: 'prod-sample-2',
+          sku: 'SAMPLE-TBL-01',
+          name_en: 'Folding Dining / Buffet Table [Placeholder Sample - Edit in Admin]',
+          name_bn: 'ফোল্ডিং ডাইনিং টেবিল [নমুনা - অ্যাডমিনে পরিবর্তন করুন]',
+          category_id: 'cat-chairs-tables',
+          description: 'Template item for rectangular event and catering tables. Edit or duplicate this card in the Admin Dashboard.',
+          price: null,
+          pricing_unit: 'per item / per day',
+          pricing_notes: '[Pricing Rule Placeholder — Set rate in Admin]',
+          stock_quantity: null,
+          images: [],
+          svg_icon: 'table',
+          is_published: true,
+          is_available: true
+        },
+        {
+          id: 'prod-sample-3',
+          sku: 'SAMPLE-UTN-01',
+          name_en: 'Large Cooking Handi / Degchi & Serving Set [Placeholder Sample]',
+          name_bn: 'বড় হাঁড়ি / ডেকচি ও ক্যাটারিং সেট [নমুনা]',
+          category_id: 'cat-utensils',
+          description: 'Template item for feast cooking vessels, chafing dishes, drums, and serving spoons. Replace with your specific utensil sizes and rates.',
+          price: null,
+          pricing_unit: 'per set',
+          pricing_notes: '[Pricing Rule Placeholder — Set rate in Admin]',
+          stock_quantity: null,
+          images: [],
+          svg_icon: 'utensil',
+          is_published: true,
+          is_available: true
+        },
+        {
+          id: 'prod-sample-4',
+          sku: 'SAMPLE-SOF-01',
+          name_en: 'Decorative Bridal Stage Sofa [Placeholder Sample - Edit in Admin]',
+          name_bn: 'বিয়ের স্টেজ সোফা [নমুনা - অ্যাডমিনে পরিবর্তন করুন]',
+          category_id: 'cat-bridal-sofas',
+          description: 'Template item for wedding & reception stage seating. Upload real photographs from your phone in the Admin Dashboard.',
+          price: null,
+          pricing_unit: 'per event',
+          pricing_notes: '[Pricing Rule Placeholder — Set rate in Admin]',
+          stock_quantity: null,
+          images: [],
+          svg_icon: 'sofa',
+          is_published: true,
+          is_available: true
+        },
+        {
+          id: 'prod-sample-5',
+          sku: 'SAMPLE-UMB-01',
+          name_en: 'Garden / Event Umbrella [Placeholder Sample - Edit in Admin]',
+          name_bn: 'ইভেন্ট ছাতা [নমুনা - অ্যাডমিনে পরিবর্তন করুন]',
+          category_id: 'cat-umbrellas-sheets',
+          description: 'Template item for large outdoor shade umbrellas for daytime functions and catering stalls.',
+          price: null,
+          pricing_unit: 'per item / per day',
+          pricing_notes: '[Pricing Rule Placeholder — Set rate in Admin]',
+          stock_quantity: null,
+          images: [],
+          svg_icon: 'umbrella',
+          is_published: true,
+          is_available: true
+        },
+        {
+          id: 'prod-sample-6',
+          sku: 'SAMPLE-SHT-01',
+          name_en: 'Heavy-Duty Waterproof Plastic Sheet / Tarpaulin [Placeholder Sample]',
+          name_bn: 'ওয়াটারপ্রুফ প্লাস্টিক শিট / ত্রিপল [নমুনা]',
+          category_id: 'cat-umbrellas-sheets',
+          description: 'Template item for weather-protection sheets and ground covers. Specify dimensions and rental rates in Admin.',
+          price: null,
+          pricing_unit: 'per day',
+          pricing_notes: '[Pricing Rule Placeholder — Set rate in Admin]',
+          stock_quantity: null,
+          images: [],
+          svg_icon: 'sheet',
+          is_published: true,
+          is_available: true
+        }
+      ]
+    };
+
+    /*************************************************************************
+     * 2. BILINGUAL UI TRANSLATIONS (ENGLISH & BENGALI)
+     *************************************************************************/
+    const I18N = {
+      en: {
+        topBarNotice: 'Zero-Cost Architecture • Placeholder Mode Active',
+        navPublicSite: 'Customer Site',
+        navAdminPanel: 'Admin Dashboard',
+        callNow: 'Call Us',
+        enquiryListBtn: 'Enquiry List',
+        browseCatalogue: 'Browse Rental Catalogue',
+        whatsappEnquiry: 'WhatsApp Us',
+        howItWorksTitle: 'How Renting Works (Simple 3-Step Process)',
+        step1Title: 'Select Items & Quantities',
+        step1Desc: 'Browse our catalogue and add chairs, tables, utensils, or bridal sofas to your enquiry list.',
+        step2Title: 'Send Enquiry on WhatsApp or Call',
+        step2Desc: 'Pick your event dates and send a pre-filled WhatsApp message—no typing or online payment needed.',
+        step3Title: 'Confirm Availability & Self-Collection',
+        occasionsLabel: 'Occasions We Serve:',
+        catalogueHeading: 'Rental Product Catalogue',
+        catalogueSubheading: 'Select items to build your WhatsApp quote request. Final availability is confirmed by the owner.',
+        availableOnly: 'Available Only',
+        noProductsFound: 'No matching rental items found',
+        noProductsDesc: 'Try clearing your search filter or ask us directly on WhatsApp for custom requirements.',
+        collectionTitle: 'Collection & Return Arrangements',
+        serviceAreaTitle: 'Service Area & Timings',
+        directContactTitle: 'Direct Contact & Support',
+        reviewEnquiry: 'Review Enquiry',
+        enquiryDrawerTitle: 'Your Rental Enquiry List',
+        enquiryDrawerSub: 'No online payment required • Send directly on WhatsApp',
+        allCategories: 'All Items',
+        addToEnquiry: '+ Add to Enquiry',
+        viewDetails: 'Details'
+      },
+      bn: {
+        topBarNotice: 'জিরো-কস্ট ওয়েবসাইট • প্লেসহোল্ডার মোড চালু আছে',
+        navPublicSite: 'গ্রাহক ওয়েবসাইট',
+        navAdminPanel: 'অ্যাডমিন প্যানেল',
+        callNow: 'কল করুন',
+        enquiryListBtn: 'অনুসন্ধান তালিকা',
+        browseCatalogue: 'ভাড়ার তালিকা দেখুন',
+        whatsappEnquiry: 'হোয়াটসঅ্যাপ করুন',
+        howItWorksTitle: 'ভাড়া নেওয়ার সহজ ৩টি ধাপ',
+        step1Title: 'সামগ্রী ও সংখ্যা নির্বাচন করুন',
+        step1Desc: 'ক্যাটালগ থেকে চেয়ার, টেবিল, বাসনপত্র বা বিয়ের সোফা আপনার তালিকায় যোগ করুন।',
+        step2Title: 'হোয়াটসঅ্যাপ বা ফোনে পাঠান',
+        step2Desc: 'অনুষ্ঠানের তারিখ লিখুন এবং এক ক্লিকে হোয়াটসঅ্যাপে তালিকা পাঠান—কোনো অগ্রিম অনলাইন পেমেন্ট লাগবে না।',
+        step3Title: 'নিশ্চিতকরণ ও সংগ্রহ (Self-Collection)',
+        occasionsLabel: 'যেসব অনুষ্ঠানে আমরা পরিষেবা দিই:',
+        catalogueHeading: 'ভাড়ার সামগ্রীর তালিকা (Catalogue)',
+        catalogueSubheading: 'প্রয়োজনীয় জিনিস বেছে নিয়ে হোয়াটসঅ্যাপে কোটেশন পাঠান। মালিক ফোনে বা মেসেজে প্রাপ্যতা নিশ্চিত করবেন।',
+        availableOnly: 'শুধুমাত্র উপলব্ধ সামগ্রী',
+        noProductsFound: 'কোনো সামগ্রী পাওয়া যায়নি',
+        noProductsDesc: 'অনুগ্রহ করে ফিল্টার পরিবর্তন করুন অথবা সরাসরি হোয়াটসঅ্যাপে যোগাযোগ করুন।',
+        collectionTitle: 'সামগ্রী সংগ্রহ ও ফেরত দেওয়ার নিয়ম',
+        serviceAreaTitle: 'পরিষেবা এলাকা ও সময়সূচী',
+        directContactTitle: 'সরাসরি যোগাযোগ',
+        reviewEnquiry: 'তালিকা দেখুন',
+        enquiryDrawerTitle: 'আপনার নির্বাচিত সামগ্রীর তালিকা',
+        enquiryDrawerSub: 'অনলাইন পেমেন্ট প্রয়োজন নেই • সরাসরি হোয়াটসঅ্যাপে পাঠান',
+        allCategories: 'সব সামগ্রী',
+        addToEnquiry: '+ তালিকায় যোগ করুন',
+        viewDetails: 'বিস্তারিত'
+      }
+    };
+
+    /*************************************************************************
+     * 3. APPLICATION STATE VARIABLES
+     *************************************************************************/
+    let appState = loadAppState();
+    let enquiryCart = loadEnquiryCart(); // { [productId]: quantity }
+    let currentLang = 'en';
+    let selectedPublicCategory = 'all';
+    let isAdminAuthenticated = false;
+    let editingProductImages = []; // Array of base64/URL strings during modal edit
+    let supabaseClient = null;
+
+    function loadAppState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_STATE);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.settings && Array.isArray(parsed.categories) && Array.isArray(parsed.products)) {
+            return parsed;
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load saved state, using default placeholders.', e);
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_STATE));
+    }
+
+    function saveAppState() {
+      try {
+        localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(appState));
+      } catch (e) {
+        showToast('Storage limit reached! Try removing large images or exporting backup.', 'error');
+      }
+      renderAll();
+    }
+
+    function loadEnquiryCart() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_CART);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveEnquiryCart() {
+      try {
+        localStorage.setItem(STORAGE_KEY_CART, JSON.stringify(enquiryCart));
+      } catch (e) {}
+      updateCartBadges();
+    }
+
+    /*************************************************************************
+     * 4. CLEAN SVG PLACEHOLDER GRAPHICS FOR PRODUCTS WITHOUT PHOTOS
+     *************************************************************************/
+    function getCategorySvgPlaceholder(iconType) {
+      const icons = {
+        chair: `<svg class="w-16 h-16 text-maroon-600/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 3v9m10-9v9M5 12h14M6 12v8m12-8v8M7 6h10"/></svg>`,
+        table: `<svg class="w-16 h-16 text-maroon-600/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M5 10v9m14-9v9M4 7h16l1 3H3l1-3z"/></svg>`,
+        utensil: `<svg class="w-16 h-16 text-maroon-600/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 11h16a1 1 0 011 1v2a6 6 0 01-6 6H9a6 6 0 01-6-6v-2a1 1 0 011-1zm5-5h6m-3-2v2"/></svg>`,
+        sofa: `<svg class="w-16 h-16 text-maroon-600/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12V9a3 3 0 013-3h10a3 3 0 013 3v3m-18 0a2 2 0 012 2v3h16v-3a2 2 0 012-2m-20 0v6h20v-6"/></svg>`,
+        umbrella: `<svg class="w-16 h-16 text-maroon-600/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c-4.97 0-9 4.03-9 9h18c0-4.97-4.03-9-9-9zm0 9v7a2 2 0 004 0"/></svg>`,
+        sheet: `<svg class="w-16 h-16 text-maroon-600/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16v12H4zM8 6v12m8-12v12M4 12h16"/></svg>`
+      };
+      return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-maroon-50 to-amber-50 p-4 text-center">
+          ${icons[iconType] || icons.chair}
+          <span class="mt-2 px-2 py-0.5 rounded bg-white/80 text-[10px] font-bold text-maroon-800 border border-maroon-200">
+            Photo Placeholder — Upload Real Image in Admin
+          </span>
+        </div>
+      `;
+    }
+
+    /*************************************************************************
+     * 5. PUBLIC WEBSITE RENDERING
+     *************************************************************************/
+    function renderPublicBusinessInfo() {
+      const s = appState.settings;
+      document.title = `${s.business_name} — Event Rentals`;
+      document.getElementById('publicLogoBox').textContent = (s.logo_text || 'ER').slice(0, 3).toUpperCase();
+      document.getElementById('publicBusinessName').textContent = s.business_name;
+      document.getElementById('publicTagline').textContent = s.tagline;
+      document.getElementById('publicServiceAreaBadge').textContent = s.service_area;
+      document.getElementById('publicHeroTitle').textContent = s.hero_title;
+      document.getElementById('publicHeroSubtext').textContent = s.hero_subtext;
+      document.getElementById('publicCollectionSummary').textContent = s.collection_instructions;
+      document.getElementById('footerCollectionText').textContent = s.collection_instructions;
+      document.getElementById('footerServiceArea').textContent = s.service_area;
+      document.getElementById('footerOpeningHours').textContent = s.opening_hours;
+      document.getElementById('footerPhoneDisplay').textContent = s.phone_number;
+      document.getElementById('footerWhatsappDisplay').textContent = s.whatsapp_number;
+      document.getElementById('footerBizName').textContent = s.business_name;
+    }
+
+    function renderPublicCategoryPills() {
+      const container = document.getElementById('publicCategoryPills');
+      const visibleCats = [...appState.categories]
+        .filter(c => !c.is_hidden)
+        .sort((a, b) => a.display_order - b.display_order);
+
+      const allLabel = I18N[currentLang].allCategories;
+      let html = `
+        <button onclick="selectPublicCategory('all')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition shrink-0 ${
+          selectedPublicCategory === 'all'
+            ? 'bg-maroon-600 text-white shadow-sm'
+            : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50'
+        }">
+          ${escapeHtml(allLabel)}
+        </button>
+      `;
+
+      visibleCats.forEach(cat => {
+        const label = currentLang === 'bn' && cat.name_bn ? cat.name_bn : cat.name_en;
+        const active = selectedPublicCategory === cat.id;
+        html += `
+          <button onclick="selectPublicCategory('${cat.id}')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition shrink-0 ${
+            active
+              ? 'bg-maroon-600 text-white shadow-sm'
+              : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50'
+          }">
+            ${escapeHtml(label)}
+          </button>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function selectPublicCategory(catId) {
+      selectedPublicCategory = catId;
+      renderPublicCategoryPills();
+      renderPublicCatalogue();
+    }
+
+    function resetPublicFilters() {
+      selectedPublicCategory = 'all';
+      document.getElementById('publicSearchInput').value = '';
+      document.getElementById('onlyAvailableCheckbox').checked = false;
+      renderPublicCategoryPills();
+      renderPublicCatalogue();
+    }
+
+    function renderPublicCatalogue() {
+      const grid = document.getElementById('publicProductGrid');
+      const emptyState = document.getElementById('publicEmptyState');
+      const searchVal = (document.getElementById('publicSearchInput').value || '').trim().toLowerCase();
+      const onlyAvail = document.getElementById('onlyAvailableCheckbox').checked;
+
+      const hiddenCategoryIds = new Set(appState.categories.filter(c => c.is_hidden).map(c => c.id));
+      const catMap = {};
+      appState.categories.forEach(c => { catMap[c.id] = c; });
+
+      const filtered = appState.products.filter(p => {
+        if (!p.is_published) return false;
+        if (hiddenCategoryIds.has(p.category_id)) return false;
+        if (selectedPublicCategory !== 'all' && p.category_id !== selectedPublicCategory) return false;
+        if (onlyAvail && !p.is_available) return false;
+        if (searchVal) {
+          const hay = `${p.name_en} ${p.name_bn || ''} ${p.description || ''} ${p.sku || ''}`.toLowerCase();
+          if (!hay.includes(searchVal)) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(p => {
+        const cat = catMap[p.category_id];
+        const catLabel = cat ? (currentLang === 'bn' && cat.name_bn ? cat.name_bn : cat.name_en) : 'Uncategorized';
+        const prodTitle = currentLang === 'bn' && p.name_bn ? p.name_bn : p.name_en;
+        const hasPrice = p.price !== null && p.price !== '' && !isNaN(Number(p.price)) && p.pricing_unit !== 'price on request';
+        const priceDisplay = hasPrice
+          ? `₹${Number(p.price).toLocaleString('en-IN')}`
+          : `<span class="text-amber-700 text-xs font-bold">[Price Placeholder / On Request]</span>`;
+
+        const qtyInCart = enquiryCart[p.id] || 0;
+        const hasPhoto = Array.isArray(p.images) && p.images.length > 0;
+
+        // Availability Badge
+        let availBadge = '';
+        if (!p.is_available) {
+          availBadge = `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-red-100 text-red-700">Currently Unavailable</span>`;
+        } else if (p.stock_quantity !== null && p.stock_quantity !== '' && !isNaN(Number(p.stock_quantity))) {
+          availBadge = `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">Available (${Number(p.stock_quantity)} in stock)</span>`;
+        } else {
+          availBadge = `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Available for Enquiry</span>`;
+        }
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition flex flex-col overflow-hidden">
+            <!-- Image Box -->
+            <div onclick="openProductDetailModal('${p.id}')" class="relative h-48 bg-slate-100 cursor-pointer overflow-hidden group">
+              ${
+                hasPhoto
+                  ? `<img src="${p.images[0]}" alt="${escapeHtml(prodTitle)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.outerHTML='&lt;div class=\\'p-6 text-center text-xs text-slate-400\\'&gt;Image unavailable&lt;/div&gt;'" />`
+                  : getCategorySvgPlaceholder(p.svg_icon)
+              }
+              <div class="absolute top-2.5 left-2.5">
+                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/90 backdrop-blur-xs text-maroon-800 shadow-xs">
+                  ${escapeHtml(catLabel)}
+                </span>
+              </div>
+              ${
+                p.sku
+                  ? `<div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-slate-900/75 text-white text-[10px] font-mono">${escapeHtml(p.sku)}</div>`
+                  : ''
+              }
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between gap-2">
+                  ${availBadge}
+                </div>
+                <h3 onclick="openProductDetailModal('${p.id}')" class="font-bold text-slate-900 text-base leading-snug hover:text-maroon-600 cursor-pointer">
+                  ${escapeHtml(prodTitle)}
+                </h3>
+                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                  ${escapeHtml(p.description || '')}
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-slate-100 space-y-3">
+                <div class="flex items-baseline justify-between">
+                  <div>
+                    <div class="text-base font-extrabold text-slate-900">${priceDisplay}</div>
+                    <div class="text-[11px] text-slate-500">${escapeHtml(p.pricing_unit)}</div>
+                  </div>
+                  <button onclick="openProductDetailModal('${p.id}')" class="text-xs font-bold text-maroon-600 hover:underline">
+                    ${escapeHtml(I18N[currentLang].viewDetails)} →
+                  </button>
+                </div>
+
+                <!-- Cart Controls -->
+                ${
+                  !p.is_available
+                    ? `<button disabled class="w-full py-2.5 rounded-xl bg-slate-100 text-slate-400 font-bold text-xs cursor-not-allowed">Unavailable</button>`
+                    : qtyInCart > 0
+                    ? `
+                      <div class="flex items-center justify-between bg-maroon-50 border border-maroon-200 rounded-xl p-1">
+                        <button onclick="changeEnquiryQty('${p.id}', -1)" class="w-9 h-8 rounded-lg bg-white hover:bg-slate-100 text-maroon-700 font-extrabold text-base shadow-2xs">−</button>
+                        <span class="text-xs font-extrabold text-maroon-900">${qtyInCart} in list</span>
+                        <button onclick="changeEnquiryQty('${p.id}', 1)" class="w-9 h-8 rounded-lg bg-maroon-600 hover:bg-maroon-700 text-white font-extrabold text-base shadow-2xs">+</button>
+                      </div>
+                    `
+                    : `
+                      <button onclick="changeEnquiryQty('${p.id}', 1)" class="w-full py-2.5 rounded-xl bg-maroon-600 hover:bg-maroon-700 text-white font-bold text-xs transition shadow-xs">
+                        ${escapeHtml(I18N[currentLang].addToEnquiry)}
+                      </button>
+                    `
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /*************************************************************************
+     * 6. PRODUCT DETAIL MODAL
+     *************************************************************************/
+    function openProductDetailModal(productId) {
+      const p = appState.products.find(item => item.id === productId);
+      if (!p) return;
+
+      const cat = appState.categories.find(c => c.id === p.category_id);
+      const catLabel = cat ? (currentLang === 'bn' && cat.name_bn ? cat.name_bn : cat.name_en) : 'Category';
+      const title = currentLang === 'bn' && p.name_bn ? p.name_bn : p.name_en;
+
+      document.getElementById('detailModalCategoryBadge').textContent = catLabel;
+      document.getElementById('detailModalSku').textContent = p.sku ? `SKU: ${p.sku}` : '';
+      document.getElementById('detailModalTitle').textContent = title;
+
+      const hasPrice = p.price !== null && p.price !== '' && !isNaN(Number(p.price)) && p.pricing_unit !== 'price on request';
+      document.getElementById('detailModalPrice').textContent = hasPrice
+        ? `₹${Number(p.price).toLocaleString('en-IN')}`
+        : '[Price Placeholder / On Request]';
+      document.getElementById('detailModalUnit').textContent = p.pricing_unit || '';
+      document.getElementById('detailModalDesc').textContent = p.description || 'No additional description provided.';
+      document.getElementById('detailModalPricingNotes').textContent = p.pricing_notes ? `📌 Pricing Note: ${p.pricing_notes}` : '';
+
+      const imgBox = document.getElementById('detailModalImageContainer');
+      const thumbsBox = document.getElementById('detailModalThumbs');
+      if (Array.isArray(p.images) && p.images.length > 0) {
+        imgBox.innerHTML = `<img id="detailPrimaryImage" src="${p.images[0]}" class="w-full h-full object-contain" />`;
+        if (p.images.length > 1) {
+          thumbsBox.innerHTML = p.images.map((src, idx) => `
+            <img src="${src}" onclick="document.getElementById('detailPrimaryImage').src='${src}'" class="w-14 h-14 rounded-lg object-cover border-2 border-slate-300 hover:border-maroon-600 cursor-pointer" />
+          `).join('');
+        } else {
+          thumbsBox.innerHTML = '';
+        }
+      } else {
+        imgBox.innerHTML = getCategorySvgPlaceholder(p.svg_icon);
+        thumbsBox.innerHTML = '';
+      }
+
+      const qty = enquiryCart[p.id] || 0;
+      const actionArea = document.getElementById('detailModalActionArea');
+      if (!p.is_available) {
+        actionArea.innerHTML = `<div class="p-3 rounded-xl bg-red-50 text-red-700 text-xs font-bold text-center">This item is currently marked unavailable.</div>`;
+      } else {
+        actionArea.innerHTML = `
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl">
+              <button onclick="changeEnquiryQty('${p.id}', -1); openProductDetailModal('${p.id}')" class="w-9 h-9 rounded-lg bg-white font-bold text-slate-800 shadow-2xs">−</button>
+              <span class="px-3 font-extrabold text-sm">${qty} in Enquiry List</span>
+              <button onclick="changeEnquiryQty('${p.id}', 1); openProductDetailModal('${p.id}')" class="w-9 h-9 rounded-lg bg-maroon-600 text-white font-bold shadow-2xs">+</button>
+            </div>
+            <button onclick="closeProductDetailModal(); openEnquiryDrawer();" class="px-5 py-3 rounded-xl bg-whatsapp-600 hover:bg-whatsapp-700 text-white font-bold text-xs sm:text-sm">
+              Open Enquiry List →
+            </button>
+          </div>
+        `;
+      }
+
+      document.getElementById('productDetailModal').classList.remove('hidden');
+    }
+
+    function closeProductDetailModal() {
+      document.getElementById('productDetailModal').classList.add('hidden');
+    }
+
+    /*************************************************************************
+     * 7. ENQUIRY LIST / SHOPPING CART WORKFLOW & WHATSAPP GENERATOR
+     *************************************************************************/
+    function changeEnquiryQty(productId, delta) {
+      const p = appState.products.find(x => x.id === productId);
+      if (!p) return;
+
+      const current = enquiryCart[productId] || 0;
+      let next = current + delta;
+      if (next <= 0) {
+        delete enquiryCart[productId];
+      } else {
+        // Respect stock_quantity cap if configured
+        if (p.stock_quantity !== null && p.stock_quantity !== '' && !isNaN(Number(p.stock_quantity))) {
+          const maxStock = Number(p.stock_quantity);
+          if (next > maxStock) {
+            showToast(`Maximum tracked quantity for this item is ${maxStock}.`, 'info');
+            next = maxStock;
+          }
+        }
+        enquiryCart[productId] = next;
+      }
+      saveEnquiryCart();
+      renderPublicCatalogue();
+      renderEnquiryDrawerItems();
+    }
+
+    function setEnquiryExactQty(productId, rawValue) {
+      const val = parseInt(rawValue, 10);
+      if (isNaN(val) || val <= 0) {
+        delete enquiryCart[productId];
+      } else {
+        enquiryCart[productId] = val;
+      }
+      saveEnquiryCart();
+      renderPublicCatalogue();
+      renderEnquiryDrawerItems();
+    }
+
+    function clearEnquiryCart() {
+      enquiryCart = {};
+      saveEnquiryCart();
+      renderPublicCatalogue();
+      renderEnquiryDrawerItems();
+    }
+
+    function updateCartBadges() {
+      const totalItems = Object.values(enquiryCart).reduce((acc, q) => acc + q, 0);
+      document.getElementById('headerCartBadge').textContent = totalItems;
+      document.getElementById('mobileBarCount').textContent = totalItems;
+    }
+
+    function openEnquiryDrawer() {
+      renderEnquiryDrawerItems();
+      document.getElementById('enquiryDrawerModal').classList.remove('hidden');
+    }
+
+    function closeEnquiryDrawer() {
+      document.getElementById('enquiryDrawerModal').classList.add('hidden');
+    }
+
+    function calculateRentalDays() {
+      const startVal = document.getElementById('enqStartDate').value;
+      const endVal = document.getElementById('enqReturnDate').value;
+      if (!startVal || !endVal) return 1;
+      const d1 = new Date(startVal);
+      const d2 = new Date(endVal);
+      const diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+      return diff >= 1 ? diff : 1;
+    }
+
+    function updateEnquiryTotals() {
+      renderEnquiryDrawerItems();
+    }
+
+    function renderEnquiryDrawerItems() {
+      const container = document.getElementById('enquiryCartItemsContainer');
+      const estimateBox = document.getElementById('enquiryEstimateBox');
+      const entries = Object.entries(enquiryCart);
+
+      if (entries.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 rounded-xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
+            Your enquiry list is empty. Browse the catalogue and click <strong>"+ Add to Enquiry"</strong> on any item.
+          </div>
+        `;
+        estimateBox.innerHTML = `<p class="text-xs text-slate-500">Add items to see your summary.</p>`;
+        return;
+      }
+
+      const days = calculateRentalDays();
+      let fixedSubtotal = 0;
+      let hasUnpricedOrCustomItems = false;
+
+      container.innerHTML = entries.map(([prodId, qty]) => {
+        const p = appState.products.find(x => x.id === prodId);
+        if (!p) return '';
+        const title = currentLang === 'bn' && p.name_bn ? p.name_bn : p.name_en;
+        const hasPrice = p.price !== null && p.price !== '' && !isNaN(Number(p.price)) && p.pricing_unit !== 'price on request';
+
+        let lineNote = '';
+        if (hasPrice) {
+          const unitRate = Number(p.price);
+          const isDayBased = (p.pricing_unit || '').includes('day');
+          const lineTotal = isDayBased ? unitRate * qty * days : unitRate * qty;
+          fixedSubtotal += lineTotal;
+          lineNote = `₹${unitRate} (${p.pricing_unit}) → ₹${lineTotal.toLocaleString('en-IN')}`;
+        } else {
+          hasUnpricedOrCustomItems = true;
+          lineNote = `Rate confirmed on quote (${p.pricing_unit})`;
+        }
+
+        return `
+          <div class="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <p class="font-bold text-slate-900 text-xs sm:text-sm truncate">${escapeHtml(title)}</p>
+              <p class="text-[11px] text-slate-500">${escapeHtml(lineNote)}</p>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="changeEnquiryQty('${p.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-xs">−</button>
+              <input type="number" min="1" value="${qty}" onchange="setEnquiryExactQty('${p.id}', this.value)" class="w-12 text-center py-1 rounded border border-slate-300 text-xs font-bold" />
+              <button onclick="changeEnquiryQty('${p.id}', 1)" class="w-7 h-7 rounded-lg bg-maroon-600 text-white font-bold text-xs">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Honest Estimate Box (Never displays a misleading total when pricing rules are incomplete)
+      if (fixedSubtotal > 0 && !hasUnpricedOrCustomItems) {
+        estimateBox.innerHTML = `
+          <div class="flex items-center justify-between text-sm font-extrabold text-slate-900">
+            <span>Estimated Rental Total (${days} day${days > 1 ? 's' : ''}):</span>
+            <span class="text-maroon-700">₹${fixedSubtotal.toLocaleString('en-IN')}</span>
+          </div>
+          <p class="text-[11px] text-slate-500">Subject to owner confirmation of dates and availability.</p>
+        `;
+      } else if (fixedSubtotal > 0 && hasUnpricedOrCustomItems) {
+        estimateBox.innerHTML = `
+          <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-slate-900">
+            <span>Partial Subtotal (Priced Items):</span>
+            <span class="text-maroon-700">₹${fixedSubtotal.toLocaleString('en-IN')} + Custom Quote Items</span>
+          </div>
+          <p class="text-[11px] text-amber-800">Some selected items have placeholder/custom pricing. The owner will confirm the complete total on WhatsApp.</p>
+        `;
+      } else {
+        estimateBox.innerHTML = `
+          <p class="text-xs font-bold text-slate-800">Total Estimate: To Be Confirmed by Owner</p>
+          <p class="text-[11px] text-slate-500">Selected items currently use placeholder or on-request pricing. Send your list on WhatsApp to receive an exact quote.</p>
+        `;
+      }
+    }
+
+    function buildEnquiryMessageText() {
+      const s = appState.settings;
+      const entries = Object.entries(enquiryCart);
+      const startDate = document.getElementById('enqStartDate').value || 'Not specified';
+      const returnDate = document.getElementById('enqReturnDate').value || 'Not specified';
+      const custName = (document.getElementById('enqCustomerName').value || '').trim() || 'Not provided';
+      const custPhone = (document.getElementById('enqCustomerPhone').value || '').trim() || 'Not provided';
+      const occasion = document.getElementById('enqOccasion').value;
+      const location = (document.getElementById('enqLocation').value || '').trim() || 'Not specified';
+      const notes = (document.getElementById('enqNotes').value || '').trim();
+      const days = calculateRentalDays();
+
+      let lines = [];
+      lines.push(`Hello *${s.business_name}*,`);
+      lines.push(`I would like to enquire about renting the following items:`);
+      lines.push(``);
+
+      let fixedSubtotal = 0;
+      let hasCustom = false;
+
+      entries.forEach(([prodId, qty], index) => {
+        const p = appState.products.find(x => x.id === prodId);
+        if (!p) return;
+        const hasPrice = p.price !== null && p.price !== '' && !isNaN(Number(p.price)) && p.pricing_unit !== 'price on request';
+        if (hasPrice) {
+          const rate = Number(p.price);
+          const isDay = (p.pricing_unit || '').includes('day');
+          const sub = isDay ? rate * qty * days : rate * qty;
+          fixedSubtotal += sub;
+          lines.push(`${index + 1}. *${p.name_en}* — Qty: ${qty} (@ ₹${rate} ${p.pricing_unit})`);
+        } else {
+          hasCustom = true;
+          lines.push(`${index + 1}. *${p.name_en}* — Qty: ${qty} (Quote requested)`);
+        }
+      });
+
+      lines.push(``);
+      if (fixedSubtotal > 0 && !hasCustom) {
+        lines.push(`*Estimated Total (${days} day${days > 1 ? 's' : ''}):* ₹${fixedSubtotal.toLocaleString('en-IN')}`);
+      } else if (fixedSubtotal > 0 && hasCustom) {
+        lines.push(`*Priced Items Subtotal:* ₹${fixedSubtotal.toLocaleString('en-IN')} (+ items for quote)`);
+      }
+
+      lines.push(`*Rental Date:* ${startDate}`);
+      lines.push(`*Return Date:* ${returnDate}`);
+      lines.push(`*Occasion:* ${occasion}`);
+      lines.push(`*Event Area:* ${location}`);
+      lines.push(`*Customer Name:* ${custName}`);
+      lines.push(`*Contact Phone:* ${custPhone}`);
+      if (notes) {
+        lines.push(`*Notes:* ${notes}`);
+      }
+      lines.push(``);
+      lines.push(`Please confirm item availability and final rental charges. Thank you!`);
+
+      return lines.join('\n');
+    }
+
+    function sanitizeWhatsAppPhone(raw) {
+      const digits = String(raw || '').replace(/\D/g, '');
+      return digits;
+    }
+
+    function submitEnquiryViaWhatsApp() {
+      if (Object.keys(enquiryCart).length === 0) {
+        showToast('Please add at least one product to your enquiry list first.', 'error');
+        return;
+      }
+
+      const startDate = document.getElementById('enqStartDate').value;
+      const custName = (document.getElementById('enqCustomerName').value || '').trim();
+      if (!startDate || !custName) {
+        showToast('Please enter your Rental Start Date and Your Name before sending.', 'error');
+        return;
+      }
+
+      const message = buildEnquiryMessageText();
+      const digits = sanitizeWhatsAppPhone(appState.settings.whatsapp_number);
+
+      if (!digits || digits.length < 10) {
+        // Graceful fallback if owner hasn't replaced the placeholder WhatsApp number yet
+        copyTextToClipboard(message);
+        showToast('WhatsApp number is still a placeholder! Your formatted enquiry has been copied to clipboard—update the real WhatsApp number in Admin Settings.', 'info');
+        return;
+      }
+
+      const waUrl = `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }
+
+    function openDirectWhatsApp() {
+      const digits = sanitizeWhatsAppPhone(appState.settings.whatsapp_number);
+      const msg = `Hello ${appState.settings.business_name}, I would like to enquire about renting items for an upcoming event.`;
+      if (!digits || digits.length < 10) {
+        showToast('Owner WhatsApp number is currently set to a placeholder. Configure the real number in Admin Dashboard -> Business Info.', 'info');
+        return;
+      }
+      window.open(`https://wa.me/${digits}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function handleDirectCall(event) {
+      const rawPhone = appState.settings.phone_number || '';
+      const digits = rawPhone.replace(/\D/g, '');
+      if (!digits || digits.length < 8) {
+        event.preventDefault();
+        showToast('Phone number is currently a placeholder. Set the real phone number in Admin Dashboard -> Business Info.', 'info');
+        return false;
+      }
+      event.currentTarget.href = `tel:${digits}`;
+      return true;
+    }
+
+    function copyEnquirySummaryText() {
+      if (Object.keys(enquiryCart).length === 0) {
+        showToast('Your enquiry list is empty.', 'error');
+        return;
+      }
+      const msg = buildEnquiryMessageText();
+      copyTextToClipboard(msg);
+      showToast('Enquiry summary copied to clipboard!', 'success');
+    }
+
+    /*************************************************************************
+     * 8. ADMIN AUTHENTICATION & DASHBOARD MANAGEMENT (STAGE 5)
+     *************************************************************************/
+    function togglePasswordVisibility() {
+      const input = document.getElementById('adminPasswordInput');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmailInput').value.trim();
+      const password = document.getElementById('adminPasswordInput').value;
+
+      if (supabaseClient) {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          showToast(`Supabase Auth failed: ${error.message}`, 'error');
+          return;
+        }
+        isAdminAuthenticated = true;
+        showToast('Signed in via Supabase Auth!', 'success');
+      } else {
+        if (email === 'admin@rental.local' && password === 'admin123') {
+          isAdminAuthenticated = true;
+          showToast('Unlocked Admin Dashboard!', 'success');
+        } else {
+          showToast('Invalid demo credentials. Use admin@rental.local / admin123', 'error');
+          return;
+        }
+      }
+
+      renderAdminAuthView();
+      renderAdminAll();
+    }
+
+    async function handleAdminLogout() {
+      if (supabaseClient) {
+        await supabaseClient.auth.signOut();
+      }
+      isAdminAuthenticated = false;
+      renderAdminAuthView();
+      showToast('Signed out of Admin Dashboard.', 'info');
+    }
+
+    function renderAdminAuthView() {
+      const loginScreen = document.getElementById('adminLoginScreen');
+      const workspace = document.getElementById('adminWorkspace');
+      if (isAdminAuthenticated) {
+        loginScreen.classList.add('hidden');
+        workspace.classList.remove('hidden');
+      } else {
+        loginScreen.classList.remove('hidden');
+        workspace.classList.add('hidden');
+      }
+    }
+
+    function switchAdminTab(tabName) {
+      ['products', 'categories', 'settings', 'backup'].forEach(t => {
+        const content = document.getElementById(`adminTab_${t}`);
+        const btn = document.getElementById(`adminTabBtn_${t}`);
+        if (t === tabName) {
+          content.classList.remove('hidden');
+          btn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-maroon-600 text-white shrink-0';
+        } else {
+          content.classList.add('hidden');
+          btn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200 shrink-0';
+        }
+      });
+    }
+
+    function renderAdminAll() {
+      document.getElementById('adminTotalProductsCount').textContent = appState.products.length;
+      document.getElementById('adminTotalCategoriesCount').textContent = appState.categories.length;
+
+      // Populate category filter dropdowns
+      const catFilter = document.getElementById('adminCategoryFilter');
+      const currentVal = catFilter.value || 'all';
+      const sortedCats = [...appState.categories].sort((a, b) => a.display_order - b.display_order);
+      catFilter.innerHTML = `<option value="all">All Categories</option>` + sortedCats.map(c =>
+        `<option value="${c.id}">${escapeHtml(c.name_en)}</option>`
+      ).join('');
+      catFilter.value = currentVal;
+
+      renderAdminProducts();
+      renderAdminCategories();
+      populateAdminSettingsForm();
+    }
+
+    function renderAdminProducts() {
+      const list = document.getElementById('adminProductsList');
+      const q = (document.getElementById('adminProductSearch').value || '').trim().toLowerCase();
+      const catFilter = document.getElementById('adminCategoryFilter').value;
+
+      const catMap = {};
+      appState.categories.forEach(c => { catMap[c.id] = c.name_en; });
+
+      const filtered = appState.products.filter(p => {
+        if (catFilter !== 'all' && p.category_id !== catFilter) return false;
+        if (q) {
+          const hay = `${p.name_en} ${p.name_bn || ''} ${p.sku || ''} ${p.description || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl border border-slate-200 text-center text-sm text-slate-500">No products match this filter. Click "+ Add New Rental Product" to create one.</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(p => {
+        const hasPhoto = Array.isArray(p.images) && p.images.length > 0;
+        const hasPrice = p.price !== null && p.price !== '' && !isNaN(Number(p.price)) && p.pricing_unit !== 'price on request';
+        const priceBadge = hasPrice ? `₹${Number(p.price).toLocaleString('en-IN')} / ${p.pricing_unit}` : `[Price Placeholder] (${p.pricing_unit})`;
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs flex flex-col justify-between gap-4">
+            <div class="flex items-start gap-3.5">
+              <div class="w-20 h-20 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
+                ${
+                  hasPhoto
+                    ? `<img src="${p.images[0]}" class="w-full h-full object-cover" />`
+                    : `<span class="text-xs font-bold text-maroon-700 text-center px-1">No Photo</span>`
+                }
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold ${p.is_published ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'}">
+                    ${p.is_published ? 'Published' : 'Hidden'}
+                  </span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold ${p.is_available ? 'bg-blue-50 text-blue-700' : 'bg-red-100 text-red-700'}">
+                    ${p.is_available ? 'Available' : 'Unavailable'}
+                  </span>
+                  <span class="text-[11px] text-slate-400 font-mono">${escapeHtml(p.sku || '')}</span>
+                </div>
+                <h4 class="font-bold text-slate-900 text-sm leading-snug">${escapeHtml(p.name_en)}</h4>
+                <p class="text-xs text-maroon-700 font-semibold mt-0.5">${escapeHtml(priceBadge)}</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Category: ${escapeHtml(catMap[p.category_id] || 'Other')} • Stock: ${p.stock_quantity !== null && p.stock_quantity !== '' ? p.stock_quantity : 'Untracked'}</p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5">
+                <button onclick="openProductModal('${p.id}')" class="px-3 py-1.5 rounded-lg bg-maroon-50 hover:bg-maroon-100 text-maroon-800 font-bold text-xs transition">
+                  ✏️ Edit
+                </button>
+                <button onclick="duplicateProduct('${p.id}')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition" title="Clone this product">
+                  📄 Duplicate
+                </button>
+                <button onclick="toggleProductVisibility('${p.id}')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
+                  ${p.is_published ? '🙈 Hide' : '👁️ Publish'}
+                </button>
+              </div>
+              <button onclick="confirmDeleteProduct('${p.id}')" class="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs transition">
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /*************************************************************************
+     * 9. PRODUCT ADD / EDIT / DUPLICATE / DELETE & IMAGE COMPRESSION
+     *************************************************************************/
+    function openProductModal(productId = null) {
+      const catSelect = document.getElementById('prodCategory');
+      const sortedCats = [...appState.categories].sort((a, b) => a.display_order - b.display_order);
+      catSelect.innerHTML = sortedCats.map(c => `<option value="${c.id}">${escapeHtml(c.name_en)}</option>`).join('');
+
+      document.getElementById('imageCompressionStatus').classList.add('hidden');
+
+      if (productId) {
+        const p = appState.products.find(x => x.id === productId);
+        if (!p) return;
+        document.getElementById('adminProductModalTitle').textContent = 'Edit Rental Product';
+        document.getElementById('prodEditId').value = p.id;
+        document.getElementById('prodNameEn').value = p.name_en || '';
+        document.getElementById('prodNameBn').value = p.name_bn || '';
+        document.getElementById('prodSku').value = p.sku || '';
+        document.getElementById('prodCategory').value = p.category_id;
+        document.getElementById('prodPrice').value = p.price !== null && p.price !== undefined ? p.price : '';
+        document.getElementById('prodPricingUnit').value = p.pricing_unit || 'per item / per day';
+        document.getElementById('prodStockQty').value = p.stock_quantity !== null && p.stock_quantity !== undefined ? p.stock_quantity : '';
+        document.getElementById('prodDescription').value = p.description || '';
+        document.getElementById('prodPricingNotes').value = p.pricing_notes || '';
+        document.getElementById('prodIsPublished').checked = Boolean(p.is_published);
+        document.getElementById('prodIsAvailable').checked = Boolean(p.is_available);
+        editingProductImages = Array.isArray(p.images) ? [...p.images] : [];
+      } else {
+        document.getElementById('adminProductModalTitle').textContent = 'Add New Rental Product';
+        document.getElementById('prodEditId').value = '';
+        document.getElementById('prodNameEn').value = '';
+        document.getElementById('prodNameBn').value = '';
+        document.getElementById('prodSku').value = '';
+        document.getElementById('prodPrice').value = '';
+        document.getElementById('prodPricingUnit').value = 'per item / per day';
+        document.getElementById('prodStockQty').value = '';
+        document.getElementById('prodDescription').value = '';
+        document.getElementById('prodPricingNotes').value = '';
+        document.getElementById('prodIsPublished').checked = true;
+        document.getElementById('prodIsAvailable').checked = true;
+        editingProductImages = [];
+      }
+
+      renderEditingImagesPreview();
+      document.getElementById('adminProductModal').classList.remove('hidden');
+    }
+
+    function closeProductModal() {
+      document.getElementById('adminProductModal').classList.add('hidden');
+    }
+
+    // Client-side HTML5 Canvas image compressor (<150KB target)
+    async function handleProductImageUpload(event) {
+      const files = Array.from(event.target.files || []);
+      if (files.length === 0) return;
+
+      const statusEl = document.getElementById('imageCompressionStatus');
+      statusEl.classList.remove('hidden');
+      statusEl.textContent = '⏳ Optimizing & compressing image(s)...';
+
+      for (const file of files) {
+        if (!file.type.startsWith('image/')) {
+          showToast(`Skipped ${file.name}: Not a valid image file.`, 'error');
+          continue;
+        }
+        try {
+          const originalKB = Math.round(file.size / 1024);
+          const compressedDataUrl = await compressImageFile(file, 900, 0.76);
+          const compressedKB = Math.round((compressedDataUrl.length * 3) / 4 / 1024);
+          editingProductImages.push(compressedDataUrl);
+          statusEl.textContent = `✅ Photo compressed from ${originalKB}KB → ~${compressedKB}KB (Free-tier storage friendly!)`;
+        } catch (err) {
+          showToast('Failed to process image.', 'error');
+        }
+      }
+
+      event.target.value = '';
+      renderEditingImagesPreview();
+    }
+
+    function compressImageFile(file, maxDimension = 900, quality = 0.76) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+            if (width > maxDimension || height > maxDimension) {
+              if (width > height) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+              } else {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+              }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderEditingImagesPreview() {
+      const container = document.getElementById('prodImagesPreviewList');
+      if (editingProductImages.length === 0) {
+        container.innerHTML = `<div class="col-span-full text-xs text-slate-400 italic">No photos uploaded yet. An automatic category illustration will be shown until you upload a photo.</div>`;
+        return;
+      }
+      container.innerHTML = editingProductImages.map((src, idx) => `
+        <div class="relative group h-24 rounded-xl border border-slate-300 overflow-hidden bg-white">
+          <img src="${src}" class="w-full h-full object-cover" />
+          <button type="button" onclick="removeEditingImage(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-600 text-white text-xs font-bold shadow">✕</button>
+          ${idx === 0 ? `<span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-slate-900/80 text-white text-[9px] font-bold">Main</span>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function removeEditingImage(index) {
+      editingProductImages.splice(index, 1);
+      renderEditingImagesPreview();
+    }
+
+    function handleSaveProduct(event) {
+      event.preventDefault();
+      const editId = document.getElementById('prodEditId').value;
+      const name_en = document.getElementById('prodNameEn').value.trim();
+      const name_bn = document.getElementById('prodNameBn').value.trim();
+      const sku = document.getElementById('prodSku').value.trim();
+      const category_id = document.getElementById('prodCategory').value;
+      const rawPrice = document.getElementById('prodPrice').value;
+      const price = rawPrice !== '' ? Number(rawPrice) : null;
+      const pricing_unit = document.getElementById('prodPricingUnit').value;
+      const rawStock = document.getElementById('prodStockQty').value;
+      const stock_quantity = rawStock !== '' ? parseInt(rawStock, 10) : null;
+      const description = document.getElementById('prodDescription').value.trim();
+      const pricing_notes = document.getElementById('prodPricingNotes').value.trim();
+      const is_published = document.getElementById('prodIsPublished').checked;
+      const is_available = document.getElementById('prodIsAvailable').checked;
+
+      if (editId) {
+        const idx = appState.products.findIndex(p => p.id === editId);
+        if (idx > -1) {
+          appState.products[idx] = {
+            ...appState.products[idx],
+            name_en,
+            name_bn,
+            sku,
+            category_id,
+            price,
+            pricing_unit,
+            stock_quantity,
+            description,
+            pricing_notes,
+            images: [...editingProductImages],
+            is_published,
+            is_available
+          };
+        }
+        showToast('Product updated & published to website!', 'success');
+      } else {
+        const newProd = {
+          id: 'prod-' + Date.now(),
+          name_en,
+          name_bn,
+          sku,
+          category_id,
+          price,
+          pricing_unit,
+          stock_quantity,
+          description,
+          pricing_notes,
+          images: [...editingProductImages],
+          svg_icon: 'chair',
+          is_published,
+          is_available
+        };
+        appState.products.unshift(newProd);
+        showToast('New rental product added!', 'success');
+      }
+
+      closeProductModal();
+      saveAppState();
+    }
+
+    function duplicateProduct(productId) {
+      const orig = appState.products.find(p => p.id === productId);
+      if (!orig) return;
+      const copy = JSON.parse(JSON.stringify(orig));
+      copy.id = 'prod-' + Date.now();
+      copy.name_en = `${orig.name_en} (Copy)`;
+      copy.sku = orig.sku ? `${orig.sku}-COPY` : '';
+      appState.products.unshift(copy);
+      saveAppState();
+      showToast('Product duplicated! Click Edit to customize.', 'success');
+    }
+
+    function toggleProductVisibility(productId) {
+      const p = appState.products.find(x => x.id === productId);
+      if (!p) return;
+      p.is_published = !p.is_published;
+      saveAppState();
+      showToast(p.is_published ? 'Product is now visible on Public Website.' : 'Product hidden from Public Website.', 'info');
+    }
+
+    function confirmDeleteProduct(productId) {
+      const p = appState.products.find(x => x.id === productId);
+      if (!p) return;
+      openConfirmDialog(
+        'Delete Rental Product?',
+        `Are you sure you want to permanently delete "${p.name_en}"? Tip: You can also click "Hide" if you only want to hide it temporarily.`,
+        () => {
+          appState.products = appState.products.filter(x => x.id !== productId);
+          delete enquiryCart[productId];
+          saveEnquiryCart();
+          saveAppState();
+          showToast('Product deleted.', 'info');
+        }
+      );
+    }
+
+    /*************************************************************************
+     * 10. ADMIN CATEGORIES MANAGEMENT (REORDER, RENAME, SAFE DELETE)
+     *************************************************************************/
+    function renderAdminCategories() {
+      const container = document.getElementById('adminCategoriesList');
+      const sorted = [...appState.categories].sort((a, b) => a.display_order - b.display_order);
+
+      container.innerHTML = sorted.map((cat, idx) => {
+        const count = appState.products.filter(p => p.category_id === cat.id).length;
+        return `
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-900 text-sm">${escapeHtml(cat.name_en)}</span>
+                ${cat.name_bn ? `<span class="text-xs text-slate-500">(${escapeHtml(cat.name_bn)})</span>` : ''}
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700">${count} item${count === 1 ? '' : 's'}</span>
+                ${cat.is_hidden ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Hidden</span>` : ''}
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="moveCategory(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} class="px-2.5 py-1 rounded bg-white border border-slate-300 text-xs font-bold disabled:opacity-40">↑</button>
+              <button onclick="moveCategory(${idx}, 1)" ${idx === sorted.length - 1 ? 'disabled' : ''} class="px-2.5 py-1 rounded bg-white border border-slate-300 text-xs font-bold disabled:opacity-40">↓</button>
+              <button onclick="toggleHideCategory('${cat.id}')" class="px-2.5 py-1 rounded bg-white border border-slate-300 text-xs font-semibold">
+                ${cat.is_hidden ? 'Show' : 'Hide'}
+              </button>
+              <button onclick="safeDeleteCategory('${cat.id}')" class="px-2.5 py-1 rounded bg-red-50 text-red-700 border border-red-200 text-xs font-semibold">
+                Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleAddCategory(e) {
+      e.preventDefault();
+      const name_en = document.getElementById('newCatNameEn').value.trim();
+      const name_bn = document.getElementById('newCatNameBn').value.trim();
+      if (!name_en) return;
+      appState.categories.push({
+        id: 'cat-' + Date.now(),
+        name_en,
+        name_bn,
+        display_order: appState.categories.length + 1,
+        is_hidden: false
+      });
+      document.getElementById('newCatNameEn').value = '';
+      document.getElementById('newCatNameBn').value = '';
+      saveAppState();
+      showToast(`Category "${name_en}" created!`, 'success');
+    }
+
+    function moveCategory(sortedIndex, direction) {
+      const sorted = [...appState.categories].sort((a, b) => a.display_order - b.display_order);
+      const targetIndex = sortedIndex + direction;
+      if (targetIndex < 0 || targetIndex >= sorted.length) return;
+      const temp = sorted[sortedIndex];
+      sorted[sortedIndex] = sorted[targetIndex];
+      sorted[targetIndex] = temp;
+      sorted.forEach((c, i) => { c.display_order = i + 1; });
+      appState.categories = sorted;
+      saveAppState();
+    }
+
+    function toggleHideCategory(catId) {
+      const c = appState.categories.find(x => x.id === catId);
+      if (!c) return;
+      c.is_hidden = !c.is_hidden;
+      saveAppState();
+    }
+
+    function safeDeleteCategory(catId) {
+      const attachedCount = appState.products.filter(p => p.category_id === catId).length;
+      if (attachedCount > 0) {
+        showToast(`Cannot delete: ${attachedCount} product(s) are assigned to this category. Reassign or delete those products first, or click "Hide".`, 'error');
+        return;
+      }
+      openConfirmDialog('Delete Category?', 'Are you sure you want to remove this empty category?', () => {
+        appState.categories = appState.categories.filter(c => c.id !== catId);
+        saveAppState();
+        showToast('Category removed.', 'info');
+      });
+    }
+
+    /*************************************************************************
+     * 11. ADMIN BUSINESS SETTINGS
+     *************************************************************************/
+    function populateAdminSettingsForm() {
+      const s = appState.settings;
+      document.getElementById('setBizName').value = s.business_name || '';
+      document.getElementById('setLogoText').value = s.logo_text || 'ER';
+      document.getElementById('setTagline').value = s.tagline || '';
+      document.getElementById('setWhatsapp').value = s.whatsapp_number || '';
+      document.getElementById('setPhone').value = s.phone_number || '';
+      document.getElementById('setHeroTitle').value = s.hero_title || '';
+      document.getElementById('setHeroSubtext').value = s.hero_subtext || '';
+      document.getElementById('setServiceArea').value = s.service_area || '';
+      document.getElementById('setOpeningHours').value = s.opening_hours || '';
+      document.getElementById('setCollectionInstructions').value = s.collection_instructions || '';
+    }
+
+    function handleSaveBusinessSettings(e) {
+      e.preventDefault();
+      appState.settings = {
+        business_name: document.getElementById('setBizName').value.trim(),
+        logo_text: document.getElementById('setLogoText').value.trim() || 'ER',
+        tagline: document.getElementById('setTagline').value.trim(),
+        whatsapp_number: document.getElementById('setWhatsapp').value.trim(),
+        phone_number: document.getElementById('setPhone').value.trim(),
+        hero_title: document.getElementById('setHeroTitle').value.trim(),
+        hero_subtext: document.getElementById('setHeroSubtext').value.trim(),
+        service_area: document.getElementById('setServiceArea').value.trim(),
+        opening_hours: document.getElementById('setOpeningHours').value.trim(),
+        collection_instructions: document.getElementById('setCollectionInstructions').value.trim()
+      };
+      saveAppState();
+      showToast('Business settings saved and updated on Public Website!', 'success');
+    }
+
+    /*************************************************************************
+     * 12. DATA PORTABILITY (JSON / CSV EXPORT & IMPORT) + SUPABASE CONNECTOR
+     *************************************************************************/
+    function exportDataJSON() {
+      const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rental-catalogue-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Full JSON backup downloaded!', 'success');
+    }
+
+    function exportProductsCSV() {
+      const headers = ['ID', 'SKU', 'Name (EN)', 'Name (BN)', 'Category ID', 'Price (INR)', 'Pricing Unit', 'Stock Qty', 'Published', 'Available', 'Description'];
+      const rows = appState.products.map(p => [
+        p.id,
+        p.sku || '',
+        p.name_en || '',
+        p.name_bn || '',
+        p.category_id || '',
+        p.price !== null ? p.price : '',
+        p.pricing_unit || '',
+        p.stock_quantity !== null ? p.stock_quantity : '',
+        p.is_published ? 'Yes' : 'No',
+        p.is_available ? 'Yes' : 'No',
+        (p.description || '').replace(/\n/g, ' ')
+      ]);
+      const csvContent = [headers, ...rows]
+        .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+        .join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rental-products-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('CSV spreadsheet downloaded!', 'success');
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!imported.settings || !Array.isArray(imported.categories) || !Array.isArray(imported.products)) {
+            throw new Error('Invalid backup structure.');
+          }
+          appState = imported;
+          saveAppState();
+          showToast('Catalogue & settings restored from JSON backup!', 'success');
+        } catch (err) {
+          showToast('Invalid JSON backup file.', 'error');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function resetToDefaultPlaceholders() {
+      openConfirmDialog(
+        'Reset to Default Placeholders?',
+        'This will restore the initial placeholder business info and sample products. Any unsaved custom edits will be overwritten.',
+        () => {
+          appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+          enquiryCart = {};
+          saveEnquiryCart();
+          saveAppState();
+          showToast('Reset to initial placeholder state.', 'info');
+        }
+      );
+    }
+
+    function saveSupabaseConfig() {
+      const url = document.getElementById('sbUrlInput').value.trim();
+      const key = document.getElementById('sbAnonKeyInput').value.trim();
+      if (!url || !key) {
+        showToast('Please enter both Supabase URL and Anon Key.', 'error');
+        return;
+      }
+      try {
+        supabaseClient = window.supabase.createClient(url, key);
+        localStorage.setItem(STORAGE_KEY_SB, JSON.stringify({ url, key }));
+        document.getElementById('storageModeText').textContent = 'Supabase Cloud Connected';
+        showToast('Supabase client initialized! Use your Supabase Admin credentials to log in.', 'success');
+      } catch (err) {
+        showToast('Could not initialize Supabase client. Check your URL & Anon Key.', 'error');
+      }
+    }
+
+    function disconnectSupabaseConfig() {
+      supabaseClient = null;
+      localStorage.removeItem(STORAGE_KEY_SB);
+      document.getElementById('storageModeText').textContent = 'Local Persistence Mode (Ready)';
+      showToast('Switched to Local Browser Storage mode.', 'info');
+    }
+
+    /*************************************************************************
+     * 13. NAVIGATION, LANGUAGE SWITCHING & UTILITY HELPERS
+     *************************************************************************/
+    function switchAppView(view) {
+      const views = ['public', 'admin', 'setup'];
+      views.forEach(v => {
+        const el = document.getElementById(`view${v.charAt(0).toUpperCase() + v.slice(1)}`);
+        if (v === view) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+      });
+
+      document.getElementById('navBtnPublic').className = view === 'public'
+        ? 'px-2.5 py-1 rounded-md text-xs font-semibold transition bg-maroon-600 text-white'
+        : 'px-2.5 py-1 rounded-md text-xs font-semibold transition text-slate-300 hover:text-white';
+      document.getElementById('navBtnAdmin').className = view === 'admin'
+        ? 'px-2.5 py-1 rounded-md text-xs font-semibold transition bg-maroon-600 text-white flex items-center gap-1'
+        : 'px-2.5 py-1 rounded-md text-xs font-semibold transition text-slate-300 hover:text-white flex items-center gap-1';
+      document.getElementById('navBtnSetup').className = view === 'setup'
+        ? 'px-2.5 py-1 rounded-md text-xs font-semibold transition bg-maroon-600 text-white flex items-center gap-1'
+        : 'px-2.5 py-1 rounded-md text-xs font-semibold transition text-slate-300 hover:text-white flex items-center gap-1';
+
+      if (view === 'admin') {
+        renderAdminAuthView();
+        if (isAdminAuthenticated) renderAdminAll();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'bn' : 'en';
+      applyTranslations();
+      renderPublicCategoryPills();
+      renderPublicCatalogue();
+      renderEnquiryDrawerItems();
+      showToast(currentLang === 'bn' ? 'ভাষা বাংলায় পরিবর্তন করা হয়েছে' : 'Switched language to English', 'info');
+    }
+
+    function applyTranslations() {
+      const dict = I18N[currentLang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+      });
+    }
+
+    function openConfirmDialog(title, message, onConfirm) {
+      document.getElementById('confirmDialogTitle').textContent = title;
+      document.getElementById('confirmDialogMessage').textContent = message;
+      const btn = document.getElementById('confirmDialogActionBtn');
+      btn.onclick = () => {
+        closeConfirmDialog();
+        onConfirm();
+      };
+      document.getElementById('confirmDialogModal').classList.remove('hidden');
+    }
+
+    function closeConfirmDialog() {
+      document.getElementById('confirmDialogModal').classList.add('hidden');
+    }
+
+    function copySqlSchema() {
+      const sql = document.getElementById('sqlSchemaBlock').textContent;
+      copyTextToClipboard(sql);
+      showToast('Complete PostgreSQL + RLS script copied to clipboard!', 'success');
+    }
+
+    function copyTextToClipboard(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+      } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const colors = {
+        success: 'bg-emerald-800 text-white border-emerald-600',
+        error: 'bg-red-800 text-white border-red-600',
+        info: 'bg-slate-900 text-white border-slate-700'
+      };
+      const toast = document.createElement('div');
+      toast.className = `px-4 py-3 rounded-xl border shadow-xl text-xs font-semibold max-w-xs transition-all duration-300 pointer-events-auto ${colors[type] || colors.info}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3800);
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderAll() {
+      renderPublicBusinessInfo();
+      renderPublicCategoryPills();
+      renderPublicCatalogue();
+      updateCartBadges();
+      if (isAdminAuthenticated) {
+        renderAdminAll();
+      }
+    }
+
+    // Initialize Application on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      // Set default rental date to tomorrow
+      const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+      document.getElementById('enqStartDate').value = tomorrow;
+      renderAll();
+    });
+  </script>
+</body>
+</html>
